@@ -12,6 +12,12 @@ struct Token
     Token* right;
     
     Token(string s);
+    enum{
+        EXPRESSION,
+        VARIABLE,
+        LAMBDA
+
+    } type;
 
 };
 
@@ -24,6 +30,8 @@ class ASTree{
         ~ASTree();
 
         string getRoot();
+        Token* ASTree::parseExpression(string input, int& i);
+
     private:
 };
 
