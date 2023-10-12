@@ -12,5 +12,8 @@ int main(){
 	Token* rootNode = new Token(input);
     ASTree* tree = new ASTree(input, rootNode);
     cout << "root info: " <<  tree->getRoot() << endl;
+    int i = 0;
+    tree->parseExpression(input, i);
+    // std::cout << tree->treeRoot->left;
     return 0;
 }

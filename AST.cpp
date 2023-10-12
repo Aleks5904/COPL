@@ -14,11 +14,12 @@ string ASTree::getRoot(){
 }
 
 Token* ASTree::parseExpression(string input, int& i){
+    if (input[i] == ' ') i++; 
     if (input[i] == '\\')
     {
         i++; // move past '\'
         string varName = "";
-        if (input[i] < input.size() && isalnum(input[i])){ // check var for correcteness
+        if (input[i] < input.size() && isalnum(input[i])){ 
             while (input[i] < input.size() && isalnum(input[i]))
                 varName += input[i];
         }
@@ -28,13 +29,26 @@ Token* ASTree::parseExpression(string input, int& i){
         lambda->type = Token::LAMBDA;
         lambda->left = var;
         lambda->right = parseExpression(input, i);
+        return lambda;
     }
-    if (input[i] == '(')
+    else if (input[i] == '(')
     {
         i++; // move past (
-        // Token subExpr = p
+        Token* subExpr = parseExpression(input, i);
+        if (input[i] == ')'){
+            i++;
+            return subExpr;
+        } 
     }
-    
-    
-
-}
+    else if(isalnum(input[i])){
+        string varName = "";
+        while (i < input.size() && isalnum(input[i]))
+        {
+            varName += input[i];
+            i++;
+        }
+        Token* var = new Token(varName);
+        var->type = Token::VARIABLE;
+        return var;
+    }
+} // ASTree::parseExpression

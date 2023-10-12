@@ -30,7 +30,7 @@ class ASTree{
         ~ASTree();
 
         string getRoot();
-        Token* ASTree::parseExpression(string input, int& i);
+        Token* parseExpression(string input, int& i);
 
     private:
 };
