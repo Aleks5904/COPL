@@ -7,18 +7,19 @@ using namespace std;
 
 struct Token
 {
-    string expressie;
+    string expression;
     Token* left;
     Token* right;
     
-    Token(string s);
-    enum{
+    enum Type {
         EXPRESSION,
         VARIABLE,
-        LAMBDA
-
-    } type;
-
+        LAMBDA,
+        OPEN_PAREN,
+        CLOSE_PAREN        
+    };
+    Type type;
+    Token(Type t, const string& s);
 };
 
 class ASTree{
@@ -27,12 +28,16 @@ class ASTree{
         string input;
         ASTree(const string& i, Token* newRoot);
         ASTree();
-        ~ASTree();
+        // ~ASTree();
 
         string getRoot();
-        Token* parseExpression(string input, int& i);
+        // Token* parseExpression(string input, int& i);
+        Token* parse(const string& input);
 
     private:
+        Token* parseExpression(string input, int& i);
+        Token* parseVariable(string input, int& i);
+        Token* parseLambda(string input, int& i);
 };
 
 #endif
