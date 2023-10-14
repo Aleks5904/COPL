@@ -13,6 +13,10 @@ string ASTree::getRoot(){
     return treeRoot->expression;;
 }
 
+// Token* ASTree::expr(){
+        
+// }
+
 Token* ASTree::parse(const string& input) {
     int i = 0;
     return parseExpression(input, i);

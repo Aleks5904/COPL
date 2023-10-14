@@ -1,0 +1,20 @@
+<expr>  ::= <lexpr><expr1>
+<lexpr> ::= <var><lexpr> | <pexpr>
+<expr1> ::= <expr> | empty
+<pexpr> ::= <var> | <'(' <expr> ')'>
+
+     ()
+lexpr  expr1
+
+(x y)
+    ()
+   x  y
+\x y
+\x\y(x\z y)
+
+
+                    \
+                x         \
+                        y    x   /
+                               z  y 
+                           
