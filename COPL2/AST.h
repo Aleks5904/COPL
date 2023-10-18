@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 #pragma once
 #ifndef AST
@@ -7,20 +8,33 @@ using namespace std;
 
 struct Token
 {
-    string expression;
     Token* left;
     Token* right;
     
     enum Type {
+        APPLICATION,
         EXPRESSION,
-        VARIABLE,
-        LAMBDA,
-        OPEN_PAREN,
-        CLOSE_PAREN        
-    };
-    Type type;
+        VARIABELE,
+        SLASH,
+        HAAKJEOPEN,
+        HAAKJESLUIT
+    }type;
+    	union 
+	{
+		string var; // informatie over de token
+	};
     Token(Type t, const string& s);
+
+    // default constructor
+	Token();
 };
+
+Token::Token(){
+    left = nullptr;
+    right = nullptr;
+    var = "";
+}
+
 
 class ASTree{
     public:
@@ -33,27 +47,35 @@ class ASTree{
         string getRoot();
         Token* parseExpression(string input, int& i);
         Token* parse(const string& input);
-
+        void tokenize();
     private:
         Token* parseExpression(string input, int& i);
         Token* parseVariable(string input, int& i);
         Token* parseLambda(string input, int& i);
         		//Recursive descent functions
-			
+
+        bool maakBoom();	
 		//Step 1 check if there is a expression and if it is there call lexpr and expr1
-		Token* expr();
+		Token* expr(Token* & ingang);
 			
 		//step 2 check if there is another expression or if it is empty. If not empty call itself and lexpr
-		Token* expr1();
+		Token* expr1(Token* & ingang);
 
 		//step 3 check if there is a \ or labda. If there is call var and lexpr. if not call p expr
-		Token* lexpr();
+		Token* lexpr(Token* & ingang);
 
 		//step 4 check if there is a variable. If not call expr and store depth of the brackets.
-		Token* pexpr();
+		Token* pexpr(Token* & ingang);
 
 		//check if the var is allowed
 		Token* var();
+
+        Token* peek();
+
+        int size;
+        int positie;
+        int haakje;
+        vector<Token*> tokens;
 };
 
 #endif
