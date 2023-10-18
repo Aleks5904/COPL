@@ -3,6 +3,14 @@
 ⟨expr⟩ -> '\' ⟨var⟩ ⟨expr⟩
 ⟨expr⟩ -> ⟨expr⟩ ⟨expr⟩
 
+
+<expr>  ::= <lexpr><expr1>
+<expr1> ::= <expr>          ||empty
+<lexpr> ::= '\'<var><expr>  ||<pexpr>
+<pexpr> ::= <var>           || '('<expr>')'
+
+voor elke diepte wordt de return waarde van pexpr*2 gedaan.
+
 expressie is de start instantie. Var is het einde.
 Variabelen beginnen altijd met een letter. Kan meerdere tekens lang zijn. Variabelen zijn alfa numerisch
 
