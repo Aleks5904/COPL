@@ -1,0 +1,4 @@
+*.json
+*.exe
+*.o
+.vscode/settings.json
