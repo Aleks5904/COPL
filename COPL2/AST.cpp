@@ -1,6 +1,13 @@
 #include "AST.h"
 using namespace std;
 
+// Token::Token(){
+//     left = nullptr;
+//     right = nullptr;
+//     var = "";
+// }
+Token::Token(){};
+
 // @function CharInSet()
 // @abstract Contorleert of het input een nummer of character is. 
 // @param input: Input die gecontroleerd wordt.
@@ -20,67 +27,63 @@ bool CharInSet(char input, bool first){
 	return false; // geen char/num
 } // CharInSet
 
-// Token::Token(Type t,const string& s): expression(s), type(t) {}
+ASTree::ASTree() {}
 
-ASTree::ASTree(const string& i, Token* newRoot): input(i), treeRoot(newRoot)
-{treeRoot->type = Token::EXPRESSION;}
-
-
-ASTree::ASTree() : treeRoot(nullptr) {}
-
-// string ASTree::getRoot(){
-//     return treeRoot->expression;;
-// }
-
-// Token* ASTree::expr(){
-        
-// }
-
-Token* ASTree::parse(const string& input) {
-    int i = 0;
-    return parseExpression(input, i);
-}
-
-
-// ASTree::Parser(string invoer){
-// 	input = invoer; // de doorgegevn invoer
-// 	positie = 0; // start positie in de vector
-// 	haakje = 0; // aantal haakjes (+ = open) (- = sluit)
-// 	tokenize();
-// } // ASTree::Parser
+void ASTree::parse(string invoer){
+	input = invoer; // de doorgegevn invoer
+	positie = 0; // start positie in de vector
+	haakje = 0; // aantal haakjes (+ = open) (- = sluit)
+	tokenize();
+} // ASTree::Parser
 
 void ASTree::tokenize(){
+	std::cout << input;
 	int StringSize = input.size();
+	std::cout << std::endl;
+	std::cout << "input size: " << StringSize << std::endl;
 	for (int i = 0; i < StringSize; i++){
-		Token* t = new Token;
+		std::cout << "current i: "  << i << std::endl;
+		Token* t = new Token();
 		if (input[i] == '('){ // haakje-open
 			t->type = Token::HAAKJEOPEN;
+			t->var = "(";
 			tokens.push_back(t);
+			std::cout << "( encountered at " << i << std::endl;
 		}
 		else if(input[i] == ')'){ // haakje-sluit
 			t->type = Token::HAAKJESLUIT;
+			t->var = ")";
 			tokens.push_back(t);
+			std::cout << ") encountered at " << i  << std::endl;
 		}
 		else if(input[i] == '\\'){ // slash
 			t->type = Token::SLASH;
+			t->var = "\\";
 			tokens.push_back(t);	
+			std::cout << "\\ encountered at " << i  << std::endl;
 		}
 		else if(input[i] != ' ') { // variabele
 			string variable = "";
+			std::cout << "var encountered at " << i  << std::endl;
 			t->type = Token::VARIABELE;
-			variable.push_back(input[i]);
+			variable += input[i];
 			while (input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' && input[i+1] != '\\' && i != StringSize-1){
 				i++;
-				variable.push_back(input[i]);
+				variable += input[i];
+				std::cout << "langere var" << std::endl;
 			} // check variabele op correctheid en sla aan
 			t->var = variable;
+			std::cout << "var: " << variable << std::endl;
 			tokens.push_back(t);
 		}
 		else if(input[i] == ' '){ // ga door als spatie
+			std::cout << "' ' encountered at " << i  << std::endl;
 			continue;
 		}
+		// else continue;
 	} // for
 	size = tokens.size();
+	std::cout << " size: " << size << std::endl;
 } // ASTree::tokenize
 
 bool ASTree::maakBoom(){
@@ -90,7 +93,8 @@ bool ASTree::maakBoom(){
 	return expr(treeRoot);
 } // ASTree::checkExpression
 
-Token* ASTree::expr(Token* & ingang){
+Token* ASTree::expr(Token*  ingang){
+	std::cout << ingang->var << std::endl; 
 	Token * check1;
     Token * check2;
 	cout << "expr" << endl;
@@ -99,19 +103,23 @@ Token* ASTree::expr(Token* & ingang){
 		return nullptr;
 	}
     ingang = check1;
+	std::cout << "test: "<< check1->var << std::endl; 
+	std::cout << "test: "<< ingang->var << std::endl; 
 	check2 = expr1(ingang);
-    ingang->left = check2;
+    ingang->right = check2;
     return ingang;	
 } // ASTree::expr
 
-Token* ASTree::lexpr(Token* & ingang){
+Token* ASTree::lexpr(Token*  ingang){
+	std::cout << ingang->var << std::endl; 
 	Token* check;
 	cout << "lexpr" << endl;
 	if(positie >= size){
 		cout << "Er mist een expressie" << endl;
 		exit(1);
 	}
-	ingang = peek();
+	check = peek();
+	std::cout << ingang->type << std::endl;
 	//Haakje sluit mag hier niet
 	if(check->type == Token::HAAKJESLUIT){
 		cout << "Er mist een expressie" << endl;
@@ -125,11 +133,13 @@ Token* ASTree::lexpr(Token* & ingang){
         expr(ingang->right);
 	}
 	else{
+		std::cout << "here" << std::endl;
 		return pexpr(ingang);
 	}
 } // ASTree::lexpr
 
-Token* ASTree::expr1(Token* & ingang){
+Token* ASTree::expr1(Token*  ingang){
+	std::cout << ingang->var << std::endl; 
 	Token* check;
 	cout << "expr1" << endl;
 	//Lege expressie mag
@@ -138,6 +148,7 @@ Token* ASTree::expr1(Token* & ingang){
 		return nullptr;
 	}
 	check = peek();
+	cout << check->var << std::endl;
 	if(check->type == Token::HAAKJESLUIT){
 		cout << "Expr1 sluit" << endl;
 		haakje --;
@@ -146,7 +157,8 @@ Token* ASTree::expr1(Token* & ingang){
 	return expr(ingang);
 } // ASTree::expr1
 
-Token* ASTree::pexpr(Token* & ingang){
+Token* ASTree::pexpr(Token*  ingang){
+	std::cout << ingang->var << std::endl; 
 	int check1;
 	Token* check;
 
@@ -155,10 +167,13 @@ Token* ASTree::pexpr(Token* & ingang){
 		exit(1);
 	}
 	ingang = peek();
+	std::cout << "test1: " << ingang->var << std::endl;
 	if(ingang->type == Token::VARIABELE){
+		std::cout << "variabele" << std::endl;
 		return var();
 	}
 	else if(ingang->type== Token::HAAKJEOPEN){
+		std::cout << "haakje open" << std::endl;
 		positie++;
 		haakje++;
         ingang->left = peek();
@@ -171,7 +186,7 @@ Token* ASTree::pexpr(Token* & ingang){
 		if(check->type == Token::HAAKJESLUIT){
 			cout << check1 << endl;
 			positie++;
-			return(check1/2);
+			// return(check1/2);
 		}
 		return 0;
 	}

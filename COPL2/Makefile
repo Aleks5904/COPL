@@ -1,23 +1,19 @@
-CC = g++
-CFLAGS = -Wall -std=c++11
+CXX = g++
+CXXFLAGS = -std=c++11 -Wall
 
-# List of source files
-SRCS = AST.cpp main.cpp
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+EXECUTABLE = myprogram
 
-# List of object files (automatically generated from source files)
-OBJS = $(SRCS:.cpp=.o)
+.PHONY: all clean
 
-# The main target, which will be the name of the executable
-TARGET = myprogram
+all: $(EXECUTABLE)
 
-# The build rule
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o $@
 
-# Rules to compile individual source files into object files
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $<
 
-# Clean rule to remove object files and the executable
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJECTS) $(EXECUTABLE)
