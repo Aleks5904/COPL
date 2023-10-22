@@ -40,10 +40,10 @@ int main() {
     {
         std::cout << parser.treeRoot->left->var;
     }
-    // if (parser.treeRoot->right != nullptr)
-    // {
-    //     std::cout << parser.treeRoot->right->var;
-    // }
+    if (parser.treeRoot->left->right != nullptr)
+    {
+        std::cout << parser.treeRoot->left->right->var;
+    }
     // if (result) {
         // cout << "Parsed Expression: " << result->left->expression << endl;
         // cout << "Parsed Expression: " << result->right->expression << endl;
