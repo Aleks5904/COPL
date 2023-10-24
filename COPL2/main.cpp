@@ -20,7 +20,7 @@ using namespace std;
 
 int main() {
     // string expression = "(x y)";
-    string expression = "(x y)"; // works
+    string expression = "(\\x y)"; // works
     // string expression = "(x y)  \\x (y x)";  // doesnt work 
     ASTree parser;
     parser.parse(expression);
@@ -34,15 +34,18 @@ int main() {
     
     if (parser.treeRoot != nullptr)
     {
-        std::cout << parser.treeRoot->var;
+        std::cout << "root: ";
+        std::cout << parser.treeRoot->var << std::endl;
     }
     if (parser.treeRoot->left != nullptr)
-    {
-        std::cout << parser.treeRoot->left->var;
+    {   
+        std::cout << "root->left: ";
+        std::cout << parser.treeRoot->left->var << std::endl;
     }
-    if (parser.treeRoot->left->right != nullptr)
+    if (parser.treeRoot->right != nullptr)
     {
-        std::cout << parser.treeRoot->left->right->var;
+        std::cout << "root->right: ";
+        std::cout << parser.treeRoot->right->var << std::endl;
     }
     // if (result) {
         // cout << "Parsed Expression: " << result->left->expression << endl;

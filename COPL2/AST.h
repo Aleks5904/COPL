@@ -54,16 +54,16 @@ class ASTree{
 
        
 		//Step 1 check if there is a expression and if it is there call lexpr and expr1
-		Token* expr(Token*  ingang);
+		Token* expr(Token*  ingang, Token* temp);
 			
 		//step 2 check if there is another expression or if it is empty. If not empty call itself and lexpr
-		Token* expr1(Token*  ingang);
+		Token* expr1(Token*  ingang, Token* temp);
 
 		//step 3 check if there is a \ or labda. If there is call var and lexpr. if not call p expr
-		Token* lexpr(Token*  ingang);
+		Token* lexpr(Token*  ingang, Token* temp);
 
 		//step 4 check if there is a variable. If not call expr and store depth of the brackets.
-		Token* pexpr(Token*  ingang);
+		Token* pexpr(Token*  ingang, Token* temp);
 
 		//check if the var is allowed
 		Token* var();
