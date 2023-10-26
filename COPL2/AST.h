@@ -20,14 +20,15 @@ struct Token
         HAAKJESLUIT
     }
     type;
-    union 
-	{
+    // union 
+	// {
 		string var; // informatie over de token
-	};
+	// };
     // Token(Type t, const string& s);
 
     // default constructor
-    Token();
+    Token(){};
+    ~Token(){};
 };
 
 
@@ -49,13 +50,16 @@ class ASTree{
         void tokenize();
         bool maakBoom();
         void printBoom(Token* ingang);	
+        Token* betaReduction(Token* ingang);
     private:
         // Token* parseExpression(string input, int& i);
         // Token* parseVariable(string input, int& i);
         // Token* parseLambda(string input, int& i);
         		//Recursive descent functions
 
+        void deleteSubtree(Token* ingang);
 
+        Token* copySubtree(Token* const ingang);
 		//Step 1 check if there is a expression and if it is there call lexpr and expr1
 		Token* expr(Token*  ingang);
 			
@@ -69,7 +73,6 @@ class ASTree{
 		Token* pexpr();
 
 		//check if the var is allowed
-		Token* var();
 
         Token* peek();
 
