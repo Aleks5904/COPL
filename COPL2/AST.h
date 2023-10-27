@@ -49,13 +49,16 @@ class ASTree{
         void parse(string invoer);
         void tokenize();
         bool maakBoom();
-        void printBoom(Token* ingang);	
-        Token* betaReduction(Token* ingang);
+        void printBoom(Token* ingang);
+        Token* wrapper(Token* ingnang);	
     private:
-        // Token* parseExpression(string input, int& i);
-        // Token* parseVariable(string input, int& i);
-        // Token* parseLambda(string input, int& i);
-        		//Recursive descent functions
+        Token* startingPoint(Token* ingang);
+
+        bool findAbstraction(Token* ingang);
+
+        Token* alfaConversion(Token* ingang);
+
+        Token* betaReduction(Token* ingang);
 
         void deleteSubtree(Token* ingang);
 
