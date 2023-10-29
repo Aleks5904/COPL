@@ -27,7 +27,10 @@ struct Token
     // Token(Type t, const string& s);
 
     // default constructor
-    Token(){};
+    Token(){
+        left = nullptr;
+        right = nullptr;
+    };
     ~Token(){};
 };
 
@@ -62,7 +65,7 @@ class ASTree{
 
         void deleteSubtree(Token* ingang);
 
-        Token* copySubtree(Token* const ingang);
+        Token* copySubtree(Token* ingang);
 		//Step 1 check if there is a expression and if it is there call lexpr and expr1
 		Token* expr(Token*  ingang);
 			

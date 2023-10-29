@@ -135,6 +135,7 @@ Token* ASTree::lexpr(Token* ingang){
         }
         Token* tok = new Token();
         tok->type = Token::APPLICATION;
+        tok->var = "@";
         tok->left = ingang;
         tok->right = temp;
         return tok;
@@ -143,6 +144,7 @@ Token* ASTree::lexpr(Token* ingang){
     {
         Token* lambda = new Token();
         lambda->type = Token::SLASH;
+        lambda->var = "\\";
         positie++;
         huidig = peek();
         if (huidig->type == Token::VARIABELE)
@@ -161,6 +163,7 @@ Token* ASTree::lexpr(Token* ingang){
            }
             Token* tok = new Token();
             tok->type = Token::APPLICATION;
+            tok->var = "@";
             tok->left = ingang;
             tok->right = lambda;
             return tok;
@@ -219,7 +222,7 @@ void ASTree::printBoom(Token* ingang){
     }
     else if(ingang->type == Token::SLASH){
          std::cout << "(";
-        std::cout << "\\";
+        std::cout << ingang->var;
         printBoom(ingang->left);
         std::cout << " ";
         printBoom(ingang->right);
@@ -242,7 +245,8 @@ void ASTree::deleteSubtree(Token* ingang){
         
         // go to the right child
         if(ingang->right != nullptr) deleteSubtree(ingang->right);
-    }
+        
+    }    
     delete ingang;
     ingang = nullptr;
 } // Tree::deleteSubtree
@@ -252,33 +256,32 @@ Token* ASTree::startingPoint(Token* ingang) {
         if (ingang->type == Token::APPLICATION && ingang->left != nullptr && ingang->left->type == Token::SLASH) {
             return ingang;
         }
-        
-        // Recursively check the left and right subtrees.
-        Token* leftResult = startingPoint(ingang->left);
-        Token* rightResult = startingPoint(ingang->right);
-        
-        // If a match is found in the left subtree, return it.
-        if (leftResult != nullptr) {
-            return leftResult;
-        }
-        
-        // If a match is found in the right subtree, return it.
-        if (rightResult != nullptr) {
-            return rightResult;
-        }
+        if (ingang->left != nullptr) return startingPoint(ingang->left);
+      
     }
     
     // If no match is found in this subtree, return nullptr.
     return nullptr;
 }
 
-bool ASTree::findAbstraction(Token* ingang){
-    if (ingang != nullptr)
-        if (ingang->type == Token::SLASH) return true;
+bool ASTree::findAbstraction(Token* ingang) {
+    if (ingang != nullptr) {
+        if (ingang->type == Token::SLASH) {
+            return true;
+        }
+        if (ingang->left != nullptr) {
+            // Return the result of the recursive call.
+            if (findAbstraction(ingang->left)) {
+                return true;
+            }
+        }
+    }
+    std::cout << "here";
     return false;
-} // ASTree::findAbstraction
+}
 
-Token* ASTree::copySubtree(Token* const ingang) {
+
+Token* ASTree::copySubtree(Token* ingang) {
     if (!ingang) return nullptr; // empty subtree
     
     Token* copy = new Token; // Token used to copy the tree
@@ -323,89 +326,149 @@ Token* ASTree::wrapper(Token* ingang){
             cycle = findAbstraction(ingang->left);
             std::cout << "[1]cycle: " << cycle << std::endl;
         }
-            
-        if (cycle == false && ingang->right->left != nullptr){
-            cycle = findAbstraction(ingang->right->left);  
-            std::cout << "[2]cycle: " << cycle << std::endl;
-        }
-                 
-        while (cycle && numOfIterations < 3) // perform max 3 beta-reductions
+        while(cycle && numOfIterations < 3) // perform max 3 beta-reductions
         {
+            numOfIterations++;
+            cycle = false;
             std::cout << "while" << std::endl;
             numOfIterations++;
-            // std::cout << "copy" << std::endl;
-            // printBoom(ingang);
-            // std::cout << "copy" << std::endl;
-            // ingang = betaReduction(ingang);
+            std::cout << "copy" << std::endl;
+            printBoom(ingang);
+            std::cout << "copy" << std::endl;
+            ingang = betaReduction(ingang);
+            if (ingang->left != nullptr) {
+                printBoom(ingang->left);
+                cycle = findAbstraction(ingang->left);
+            }
         }
         return ingang;
     }
 } // ASTree::wrapper
 
 Token* ASTree::betaReduction(Token* ingang){
-    std::cout << "test0";
-    int numOfSlash = 0;
-    int i = 0;
-    Token* t;
-    std::cout << "test1";
-    Token* temp = copySubtree(ingang); // make a copy of the current tree
-    std::cout << "test2";
-    Token* extraKind;
-    std::cout << std::endl;
-    if (temp != nullptr && temp->left != nullptr)
-    {   
-        if (temp->type != Token::APPLICATION || temp->left->type != Token::SLASH)
+    bool extraStep = false;
+    bool toTheRight = false;
+    Token* extraChild = nullptr;
+    Token* parent = new Token();
+    Token* temp;
+    if (ingang != nullptr)
+    {
+        Token* N = copySubtree(ingang->right);
+        if (ingang != nullptr && ingang->left != nullptr)
         {
-            i = 1;
-            std::cout << "@ and \\ searching" << std::endl;
-            temp = startingPoint(ingang);
-        }
-        // while (!(temp->type == Token::APPLICATION 
-        // && temp->left->type == Token::SLASH)) // find @ and \ together
-        // {
-        //   i++;
-        //   temp = temp->left;
-        //   std::cout << "@ and \\ searching" << std::endl;
-        // }
-        if (ingang->right->type == Token::APPLICATION ||
-                ingang->right->type == Token::SLASH )
+            if (ingang->type != Token::APPLICATION || ingang->left->type != Token::SLASH)
             {
-                t = copySubtree(ingang->right); // N
-                std::cout << "i: " << i << std::endl;
-                if (i == 0) temp = temp->left; // for simple tree move one level in depth
-
-                while (temp->right->type != Token::VARIABELE) // not sure abt this statement
-                {
-                    temp = temp->right;
-                    if (temp->type == Token::SLASH) numOfSlash++;
-                    std::cout << "temp->right is nog geen var" << std::endl;
-                }
-                deleteSubtree(temp->right);
-                temp->right = t;
-                if (temp->left->type == Token::SLASH) // meerdere kinderen
-                {
-                    extraKind = temp->left->right; // sla tweede kind op
-                    deleteSubtree(temp->left);
-                    temp->left = extraKind;
-
-                }                
-                if (temp->type == Token::APPLICATION || numOfSlash > 0){
-                    std::cout << "moeilijke tree" << std::endl;
-                    if (temp->type == Token::SLASH)
-                    {
-                        Token* t = alfaConversion(temp);
-                        return t;
-                    }
-                    else return temp;
-                }
-                    
-                else {
-                    std::cout << "makkelijke tree" << std::endl;
-                    return temp->right;
-                }
-                    
-            } 
+                temp = copySubtree(ingang);
+                deleteSubtree(ingang);
+                ingang = startingPoint(temp);
+                std::cout << "extra step" << std::endl;
+                extraStep = true;
+            }
+        }
+        if (extraStep)
+        {
+            extraChild = ingang->right;
+        }
+        ingang = ingang->left;
+        while (ingang->right->type != Token::VARIABELE)
+        {
+            ingang = ingang->right;
+            std::cout << "toTheRight" << std::endl;
+            toTheRight = true;
+        }
+        if (extraChild == nullptr){
+            delete ingang->right;
+            ingang->right = N;
+        }
+        if (extraChild != nullptr) // we have an additional child
+        {
+            std::cout << "creating parent" << std::endl;
+            parent->type = Token::APPLICATION;
+            parent->var = "@";
+            parent->left = N;
+            parent->right = extraChild;
+        }
+        if (toTheRight){
+            std::cout << "return #1" << std::endl;
+            if (ingang->right->type = Token::SLASH)
+                ingang = alfaConversion(ingang);
+            return ingang;
+        }
+        if(extraChild != nullptr){
+            std::cout << "return #2" << std::endl;
+            return parent;
+        }
+        else {
+            std::cout << "return #3" << std::endl;
+            return ingang->right;
+        }
     }
-    std::cout << "nullptr" << std::endl;
     return nullptr;
 } // ASTree::betaReduction
+
+// Token* ASTree::betaReduction(Token* ingang){
+//     int numOfSlash = 0;
+//     int i = 0;
+//     Token* t;    
+//     Token* temp = copySubtree(ingang); // make a copy of the current tree
+//     Token* extraKind;
+//    if(ingang->left->type == Token::VARIABELE) extraKind = ingang->left;
+//     std::cout << std::endl;
+//     if (temp != nullptr && temp->left != nullptr)
+//     {   
+//         if (temp->type != Token::APPLICATION || temp->left->type != Token::SLASH)
+//         {
+//             i = 1;
+//             std::cout << "@ and \\ searching" << std::endl;
+//             temp = startingPoint(ingang);
+//         }
+//                  if (ingang->right == temp)
+//                 {
+//                     // std::cout << "!!!";
+//                     extraKind = ingang->left;
+//                     t = copySubtree(temp->right); // N
+//                 }
+//                 else 
+//                     t = copySubtree(ingang->right); // N
+
+//                 std::cout << "t: " << t->var << std::endl;
+//                 std::cout << "i: " << i << std::endl;
+//                 if (i == 0) temp = temp->left; // for simple tree move one level in depth
+//                 while (temp->right->type != Token::VARIABELE) // not sure abt this statement
+//                 {
+//                     temp = temp->right;
+//                     if (temp->type == Token::SLASH) numOfSlash++;
+//                     std::cout << "temp->right is nog geen var" << std::endl;
+//                 }
+//                 std::cout << temp->type << std::endl;
+//                 deleteSubtree(temp->right);
+//                 std::cout << temp->type << std::endl;
+//                 temp->right = t;
+//                 if (temp->left->type == Token::SLASH) // meerdere kinderen
+//                 {
+//                     extraKind = temp->left->right; // sla tweede kind op
+//                     deleteSubtree(temp->left);
+//                     temp->left = extraKind;
+//                 }                
+//                 if (temp->type == Token::APPLICATION || numOfSlash > 0){
+//                     std::cout << "moeilijke tree" << std::endl;
+//                     if (temp->type == Token::SLASH)
+//                     {
+//                         Token* t = alfaConversion(temp);
+//                         return t;
+//                     }
+//                     else return temp;
+//                 }
+                    
+//                 else {
+//                     printBoom(temp->right);
+//                     std::cout << std::endl;
+//                     std::cout << "makkelijke tree" << std::endl;
+//                     return temp->right;
+//                 }
+                    
+//             // } 
+//     }
+//     std::cout << "nullptr" << std::endl;
+//     return nullptr;
+// } // ASTree::betaReduction
