@@ -54,6 +54,8 @@ class ASTree{
         bool maakBoom();
         void printBoom(Token* ingang);
         Token* wrapper(Token* ingnang);	
+        void freeVector();
+        void deleteSubtree(Token* ingang);
     private:
         Token* startingPoint(Token* ingang);
 
@@ -62,8 +64,6 @@ class ASTree{
         Token* alfaConversion(Token* ingang);
 
         Token* betaReduction(Token* ingang);
-
-        void deleteSubtree(Token* ingang);
 
         Token* copySubtree(Token* ingang);
 		//Step 1 check if there is a expression and if it is there call lexpr and expr1

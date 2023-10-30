@@ -1,25 +1,6 @@
 #include "AST.h"
 using namespace std;
 
-// @function CharInSet()
-// @abstract Contorleert of het input een nummer of character is. 
-// @param input: Input die gecontroleerd wordt.
-// @param first: geeft aan of de input op "nummer" of "character" 
-// @param gecontroleerd moet worden.
-// @return return geeft terug of input een character of nummer is
-// @return (true= het is nummer/char, anders false).
-// @pre: Er is een correcte input doorgegeven.
-// @post: De input wordt qua type gecontroleerd.  
-bool CharInSet(char input, bool first){
-	if(input >= 'a' && input <= 'z')
-		return true; // charcter
-	if(input >= 'A' && input <= 'Z')
-		return true; // character
-	if(input >= '0' && input <= '9' && !first)
-		return true; // nummer
-	return false; // geen char/num
-} // CharInSet
-
 ASTree::ASTree() {}
 
 void ASTree::parse(string invoer){
@@ -70,6 +51,7 @@ void ASTree::tokenize(){
 			tokens.push_back(t);
 		}
 		else if(input[i] == ' '){ // ga door als spatie
+            delete t;
 			std::cout << "' ' encountered at " << i  << std::endl;
 			continue;
 		}
@@ -86,15 +68,9 @@ bool ASTree::maakBoom(){
 	positie = -1;
 	haakje = 0;
     treeRoot = tokens[0];
-    Token* temp = treeRoot;
 	treeRoot = expr(nullptr);
     return treeRoot;
 } // ASTree::checkExpression
-
-// <expr>  ::= <lexpr><expr1>
-// <expr1> ::= <expr>          ||empty
-// <lexpr> ::= '\'<var><expr>  ||<pexpr>
-// <pexpr> ::= <var>           || '('<expr>')'
 
 Token* ASTree::expr(Token* ingang){
     std::cout << "expr" << std::endl;
@@ -161,6 +137,7 @@ Token* ASTree::lexpr(Token* ingang){
            {
                return lambda;
            }
+            // deleteSubtree(lambda);
             Token* tok = new Token();
             tok->type = Token::APPLICATION;
             tok->var = "@";
@@ -201,6 +178,7 @@ Token* ASTree::pexpr() {
         else
         {
             std::cout << "geen sluitende haakje" << std::endl;
+            deleteSubtree(temp);
             exit(1);
         }
         
@@ -236,6 +214,17 @@ void ASTree::printBoom(Token* ingang){
         std::cout << ")";
     }
 }
+
+
+void ASTree::freeVector(){
+    for (int i = 0; i < tokens.size(); i++){
+        // only vars are used in tree creation
+        if (tokens[i]->type != Token::VARIABELE){ 
+            delete tokens[i];
+            tokens[i] = nullptr; 
+        }
+    }
+} // ASTree::freeVector
 
 void ASTree::deleteSubtree(Token* ingang){
     if (ingang)
@@ -320,6 +309,7 @@ Token* ASTree::wrapper(Token* ingang){
     int numOfIterations = 0;
     bool cycle = false;
     ingang = betaReduction(ingang);
+    return ingang;
     if (ingang != nullptr)
     {
         if (ingang->left != nullptr) {
@@ -392,14 +382,17 @@ Token* ASTree::betaReduction(Token* ingang){
             std::cout << "return #1" << std::endl;
             if (ingang->right->type = Token::SLASH)
                 ingang = alfaConversion(ingang);
+            delete parent;
             return ingang;
         }
         if(extraChild != nullptr){
             std::cout << "return #2" << std::endl;
+            // deleteSubtree(treeRoot);
             return parent;
         }
         else {
             std::cout << "return #3" << std::endl;
+            delete parent;
             return ingang->right;
         }
     }

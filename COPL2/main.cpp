@@ -19,11 +19,13 @@ int main() {
     }
     parser.maakBoom();
     parser.printBoom(parser.treeRoot);
-    Token* reduced = parser.wrapper(parser.treeRoot);
+    // Token* reduced = parser.wrapper(parser.treeRoot);
 
     std::cout << std::endl << "result main" << std::endl;
-    parser.printBoom(reduced);
+    parser.printBoom(parser.treeRoot);
     std::cout << std::endl << "result main" << std::endl;
+    parser.deleteSubtree(parser.treeRoot);
+    parser.freeVector();
     return 0;
 }
 
