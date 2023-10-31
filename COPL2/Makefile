@@ -1,19 +1,28 @@
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall
+CC=g++
+RM=rm -f
+CXXFLAGS=-std=c++11 -Wall
+LDFLAGS=
+LDLIBS=
 
-SOURCES = $(wildcard *.cpp)
-OBJECTS = $(SOURCES:.cpp=.o)
-EXECUTABLE = myprogram
+SRCS=main.cpp AST.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+TARGET=program
 
-.PHONY: all clean
+all: $(TARGET)
 
-all: $(EXECUTABLE)
+$(TARGET): $(OBJS)
+	$(CC) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o $@
-
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $<
+main.o: main.cpp AST.h token.h
+AST.o: AST.cpp AST.h
 
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	$(RM) $(OBJS) $(TARGET)
+
+distclean: clean
+
+build: $(TARGET)
+	@echo "Finished building $(TARGET)."
+
+run: build
+	./$(TARGET) positives.txt

@@ -1,0 +1,26 @@
+Class: Concepts of Programming Languages
+Group: ?
+Members:
+- Aleksandr Petrov - s3459918
+- Reyer Dix - code 
+- Nour Hassan - code
+Compiler Version: 
+  Ubuntu 11.4.0-1ubuntu1~22.04
+Operating System:
+  Linux
+
+Program work:
+  flaws? - 
+
+Deviations:
+
+
+Program flow:
+  The program reads in an expression from <file>.txt.
+  The program tokenixes the input into a vecotr of tokens.
+  The program parses each individual token using the given grammar.
+  While parsing every node, the program makes a pointer tree.
+  After constructing the tree, the program performs beta reduction on the tree,
+  while possible. (more possible information).
+  After beta reduction, the program outputs the reducted tree 
+  in form of a string using "tree-traverse" function
