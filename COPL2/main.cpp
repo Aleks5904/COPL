@@ -28,10 +28,9 @@ int main(int argc, char* argv[]) {
             exit(1);
         }
 
-        ASTree parser;
         std::string line;
         std::getline(input, line);
-        parser.parse(line);
+        ASTree parser(line);
         for (int i = 0; i < parser.size; i++) {
             std::cout << parser.tokens[i]->type;
             std::cout << parser.tokens[i]->var;

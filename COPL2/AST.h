@@ -22,12 +22,29 @@ class ASTree{
         int size;
         int positie;
         int haakje;
-        ASTree();
+        ASTree(string invoer);
 
-        void parse(string invoer);
+        // @function tokenize()
+        // @brief Loopt langs een string, maakt van elke char een token en
+        // zet het in een vector.
+        // @pre: Er bestaat een string om af te lezen.
+        // @post: De vector met tokens is gecreeerd.
         void tokenize();
+
+        // @function maakBoom()
+        // @brief Roept expr() aan voor het started van het maken van een boom.
+        // @return Returneert true als er een boom gemaakt is (anders false).
+        // @pre: Er bestaat een vector gevuld met tokens.
+        // @post: De corresponderende boom is gemaakt.
         bool maakBoom();
+
+        // @function printBoom()
+        // @brief Print het boom af door het correct langs te gaan.
+        // @param ingang: De token waarbij het printen begint.
+        // @pre: Er bestaat een correct geconstrueerde boom.
+        // @post: De boom is geprint in voor van een string.
         void printBoom(Token* ingang);
+        
         Token* wrapper(Token* ingnang);	
         void freeVector();
         void deleteSubtree(Token* ingang);

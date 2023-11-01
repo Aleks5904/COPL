@@ -3,14 +3,10 @@
 #include "token.h"
 using namespace std;
 
-ASTree::ASTree() {}
-
-void ASTree::parse(string invoer){
-	input = invoer; // de doorgegevn invoer
-	positie = 0; // start positie in de vector
-	haakje = 0; // aantal haakjes (+ = open) (- = sluit)
+ASTree::ASTree(string invoer) {
+    input = invoer; // de doorgegevn invoer
 	tokenize();
-} // ASTree::Parser
+}
 
 void ASTree::tokenize(){
 	std::cout << input;
