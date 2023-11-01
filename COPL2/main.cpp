@@ -39,12 +39,13 @@ int main(int argc, char* argv[]) {
 
         parser.maakBoom();
         parser.printBoom(parser.treeRoot);
-        parser.treeRoot = parser.wrapper(parser.treeRoot);
+        // parser.preOrder(parser.treeRoot);
+        parser.treeRoot = parser.betaReduction(parser.treeRoot);
 
         std::cout << std::endl << "result main" << std::endl;
         parser.printBoom(parser.treeRoot);
         std::cout << std::endl << "result main" << std::endl;
-        parser.deleteSubtree(parser.treeRoot);
+        // parser.deleteSubtree(parser.treeRoot);
         parser.freeVector();
         // parser.printBoom(reduced);
     }

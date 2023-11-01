@@ -45,14 +45,16 @@ class ASTree{
         // @post: De boom is geprint in voor van een string.
         void printBoom(Token* ingang);
         
-        Token* wrapper(Token* ingnang);	
+        void preOrder(Token* ingnang);	
         void freeVector();
         void deleteSubtree(Token* ingang);
+        Token* betaReduction(Token* ingang);
     private:
+        Token* findLambda(Token* ingang);
+        bool findGivenVar(Token* ingang, string variable);
         Token* startingPoint(Token* ingang);
         bool findAbstraction(Token* ingang);
         Token* alfaConversion(Token* ingang);
-        Token* betaReduction(Token* ingang);
         Token* copySubtree(Token* ingang);
 		Token* expr(Token*  ingang);
 		Token* expr1(Token*  ingang);
