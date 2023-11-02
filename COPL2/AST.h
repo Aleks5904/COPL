@@ -45,7 +45,7 @@ class ASTree{
         // @post: De boom is geprint in voor van een string.
         void printBoom(Token* ingang);
         
-        Token* preOrder(Token* ingnang);	
+        Token* postOrder(Token* ingnang);	
         void freeVector();
         void deleteSubtree(Token* ingang);
         Token* betaReduction(Token* ingang);

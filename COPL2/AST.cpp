@@ -292,29 +292,35 @@ Token* ASTree::findLambda(Token* ingang) {
     return nullptr;
 }
 
-Token* ASTree::preOrder(Token* ingang) {
+Token* ASTree::postOrder(Token* ingang) {
     if (ingang == nullptr) {
         return ingang;  // Base case: If the current node is null, exit the function.
     }
 
+    // Recursively process the left and right subtrees in a post-order manner
+    ingang->left = postOrder(ingang->left);
+    ingang->right = postOrder(ingang->right);
+
     // Check if the current node meets the condition for processing
     if (ingang->type == Token::APPLICATION && ingang->left != nullptr
         && ingang->left->type == Token::SLASH) {
-        ingang = betaReduction(ingang);
-        std::cout << "beta found" << std::endl;
-        return ingang;
+        while (ingang->type == Token::APPLICATION && ingang->left != nullptr
+            && ingang->left->type == Token::SLASH) {
+            ingang = betaReduction(ingang);
+        }
     }
 
-    // Recursively process the left and right subtrees in a preorder manner
-    ingang->left = preOrder(ingang->left);
-    ingang->right = preOrder(ingang->right);
     return ingang;
 }
 
+
 Token* ASTree::betaReduction(Token* ingang){
+    std::cout << "beta found" << std::endl;
+    int numRight = 0;
     bool toTheRight = false;
     Token* antwoord = nullptr;
     Token* copy = nullptr;
+    Token* ingang2 = nullptr;
     if (ingang != nullptr)
     {
         Token* N = copySubtree(ingang->right);
@@ -325,10 +331,10 @@ Token* ASTree::betaReduction(Token* ingang){
         Token* alfa = findLambda(ingang->right);
         if (alfa != nullptr) // possible bound variable
         {
-            bool bound = findGivenVar(N, alfa->left->var);
+            bool bound = findGivenVar(N, alfa->var);
             if (bound)
             {
-                alfa->left->var += "'";
+                alfa->var += "'";
             }
         }
         while (ingang->right->type != Token::VARIABELE)
@@ -343,16 +349,15 @@ Token* ASTree::betaReduction(Token* ingang){
         
         if (toTheRight){
             std::cout << "return #1" << std::endl;
+            ingang2 = copySubtree(ingang);
         }
 
         else {
             std::cout << "return #3" << std::endl;
-            // ingang = ingang->right;
-            Token* ingang2 = copySubtree(ingang->right);
-            // std::cout << copy->right->var;
-            deleteSubtree(copy);
-            ingang = ingang2;
+            ingang2 = copySubtree(ingang->right);
         }
+        deleteSubtree(copy);
+        ingang = ingang2;
         return ingang;
     }
     return nullptr;
