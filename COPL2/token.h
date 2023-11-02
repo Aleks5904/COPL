@@ -36,6 +36,7 @@ struct Token
 
     // default constructor
     Token(){
+        var = "";
         left = nullptr;
         right = nullptr;
     };
