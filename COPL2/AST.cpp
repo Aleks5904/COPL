@@ -271,6 +271,33 @@ bool ASTree::findGivenVar(Token* ingang, string variable) {
     return false;
 }
 
+Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable, bool& replaced) {
+    if (ingang == nullptr) {
+        return nullptr; 
+    }
+    if (ingang->var == variable && !replaced) {
+        delete ingang;
+        std::cout << "replacing with N" << std::endl;
+        ingang = N;
+        replaced = true;  // Set the flag to indicate that replacement has occurred
+        replacedAST = true;
+        std::cout << "boom: " << std::endl;
+        printBoom(ingang);
+        return ingang;
+    }
+
+    if (!replaced) ingang->right = replaceSubtree(ingang->right, N, variable, replaced);
+    if (!replaced) ingang->left = replaceSubtree(ingang->left, N, variable, replaced);
+
+    std::cout << "boom: " << std::endl;
+    printBoom(ingang);
+    return ingang;  
+}
+
+
+
+
+
 Token* ASTree::findLambda(Token* ingang) {
     if (ingang == nullptr) {
         return nullptr; 
@@ -306,6 +333,7 @@ Token* ASTree::postOrder(Token* ingang) {
         && ingang->left->type == Token::SLASH) {
         while (ingang->type == Token::APPLICATION && ingang->left != nullptr
             && ingang->left->type == Token::SLASH) {
+            replacedAST = false;
             ingang = betaReduction(ingang);
         }
     }
@@ -315,12 +343,14 @@ Token* ASTree::postOrder(Token* ingang) {
 
 
 Token* ASTree::betaReduction(Token* ingang){
+    std::string deltaX;
+    bool extraStap = false;
     std::cout << "beta found" << std::endl;
-    int numRight = 0;
+    printBoom(ingang);
     bool toTheRight = false;
-    Token* antwoord = nullptr;
     Token* copy = nullptr;
     Token* ingang2 = nullptr;
+    bool replaced = false;
     if (ingang != nullptr)
     {
         Token* N = copySubtree(ingang->right);
@@ -328,6 +358,7 @@ Token* ASTree::betaReduction(Token* ingang){
         ingang->right = nullptr;
         copy = ingang;
         ingang = ingang->left;
+        deltaX = ingang->left->var;
         Token* alfa = findLambda(ingang->right);
         if (alfa != nullptr) // possible bound variable
         {
@@ -337,15 +368,33 @@ Token* ASTree::betaReduction(Token* ingang){
                 alfa->var += "'";
             }
         }
-        while (ingang->right->type != Token::VARIABELE)
+        if (ingang->right->type != Token::VARIABELE)
         {
             ingang = ingang->right;
             std::cout << "toTheRight" << std::endl;
             toTheRight = true;
+            if (ingang->right->type != Token::VARIABELE)
+            {
+                std::cout << "extraStap" << std::endl;
+                ingang->right = replaceSubtree(ingang->right, N, deltaX, replaced);
+                if(!replacedAST) deleteSubtree(N);
+                extraStap = true;
+            }
+            
         }
-        delete ingang->right;
-        ingang->right = nullptr;
-        ingang->right = N;
+        if(!extraStap && !toTheRight){
+            std::cout << "test0";
+            ingang->right = replaceSubtree(ingang->right, N, deltaX, replaced);
+            if(!replacedAST) deleteSubtree(N);
+
+        }
+        else if (!extraStap)
+        {
+            ingang = replaceSubtree(ingang, N, deltaX, replaced);
+            if(!replacedAST) deleteSubtree(N);
+            std::cout << "test1" << std::endl;
+        }
+        
         
         if (toTheRight){
             std::cout << "return #1" << std::endl;
@@ -362,7 +411,5 @@ Token* ASTree::betaReduction(Token* ingang){
     }
     return nullptr;
 
-    // ingang = aantwoord
-    // returnn aantwoord
 } // ASTree::betaReduction
 

@@ -24,3 +24,7 @@ Program flow:
   while possible. (more possible information).
   After beta reduction, the program outputs the reducted tree 
   in form of a string using "tree-traverse" function
+
+Reductie startegie:
+  Er wordt beta-reductie uitgevoerd in post-order. Dit is het enigste strategie
+  die gebuikt wordt.
