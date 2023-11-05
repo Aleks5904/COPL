@@ -16,29 +16,26 @@ using namespace std;
 
 struct Token
 {
-    Token* left;
-    Token* right;
+    Token* links;
+    Token* rechts;
 
     enum Type
     {
-        APPLICATION,
+        APPLICATIE,
         VARIABELE,
-        SLASH,
+        LAMBDA,
         HAAKJEOPEN,
-        END,
-        HAAKJESLUIT
+        HAAKJESLUIT,
+        END
     }
     type;
-    // union 
-	// {
 		string var; // informatie over de token
-	// };
 
     // default constructor
     Token(){
         var = "";
-        left = nullptr;
-        right = nullptr;
+        links = nullptr;
+        rechts = nullptr;
     };
     ~Token(){};
 }; // Token

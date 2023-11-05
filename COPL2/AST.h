@@ -6,12 +6,12 @@ using namespace std;
 #define AST
 
 /**
- * Tree: Constructs the tree by calling the parser.
+ * ASTree: Construeert boom door ASTree aan te roepen.
  * @authors  @Aleksandr Petrov (s3459918)
  * @authors  @Reyer Dix (s3459918)
  * @authors  @Nour Hassan (s3612031)
  * @file AST.h
- * @date last change: 25/10/23
+ * @date laatste verandering: 25/10/23
  **/
 
 class ASTree{
@@ -26,20 +26,6 @@ class ASTree{
         int haakje;
         bool replacedAST = false;
         ASTree(string invoer);
-
-        // @function tokenize()
-        // @brief Loopt langs een string, maakt van elke char een token en
-        // zet het in een vector.
-        // @pre: Er bestaat een string om af te lezen.
-        // @post: De vector met tokens is gecreeerd.
-        void tokenize();
-
-        // @function maakBoom()
-        // @brief Roept expr() aan voor het started van het maken van een boom.
-        // @return Retourneert true als er een boom gemaakt is (anders false).
-        // @pre: Er bestaat een vector gevuld met tokens.
-        // @post: De corresponderende boom is gemaakt.
-        bool maakBoom();
 
         // @function printBoom()
         // @brief Print het boom af door het correct langs te gaan.
@@ -62,8 +48,6 @@ class ASTree{
         // @post: De vector is leeg.
         void leegVector();
 
-        void meerPlekken(Token* ingang, std::string variable);
-
         // @function deleteSubtree()
         // @brief Verwijdert de (sub-)boom met de gegeven ingang.
         // @param ingang: De knoop waarin het verwijderen start.
@@ -71,15 +55,16 @@ class ASTree{
         // @post: De boom is verwijdert.
         void deleteSubtree(Token* ingang);
 
-        // @function betaReduction()
-        // @brief Voert beta-eductie uit op de gegeven (sub-)boom.
-        // @param ingang: De ingang van de gegeven boom.
-        // @return Retourneert beta-gereduceerde boom.
-        // @pre: Er is een correct geconstrueerde boom doorgegeven.
-        // @post: Beta-reductie is uitgevoerd.
-        Token* betaReductie(Token* ingang);
-
     private:
+        bool CharInSet(char input, bool first);
+
+        // @function tokenize()
+        // @brief Loopt langs een string, maakt van elke char een token en
+        // zet het in een vector.
+        // @pre: Er bestaat een string om af te lezen.
+        // @post: De vector met tokens is gecreeerd.
+        void tokenize();
+
         // @function findLambda()
         // @brief Vind een knoop met type Token::SLASH (lambda)
         // voor de gegeven boom
@@ -149,7 +134,15 @@ class ASTree{
         Token* peek();
 
         
-
+        void meerPlekken(Token* ingang, std::string variable);
+        
+        // @function betaReduction()
+        // @brief Voert beta-eductie uit op de gegeven (sub-)boom.
+        // @param ingang: De ingang van de gegeven boom.
+        // @return Retourneert beta-gereduceerde boom.
+        // @pre: Er is een correct geconstrueerde boom doorgegeven.
+        // @post: Beta-reductie is uitgevoerd.
+        Token* betaReductie(Token* ingang);
         
 }; // ASTree
 

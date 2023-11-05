@@ -1,21 +1,21 @@
-Class: Concepts of Programming Languages
-Group: ?
-Members:
+Cursus: Concepts of Programming Languages
+Groep: ?
+Groep-leden:
 - Aleksandr Petrov - s3459918
 - Reyer Dix - code 
 - Nour Hassan - code
-Compiler Version: 
+Compiler Versie: 
   Ubuntu 11.4.0-1ubuntu1~22.04
-Operating System:
+Besturingssysteem:
   Linux
 
-Program work:
+Werking Programma:
   flaws? - 
 
-Deviations:
+Afdwalingen:
 
 
-Program flow:
+Programma flow:
   The program reads in an expression from <file>.txt.
   The program tokenixes the input into a vecotr of tokens.
   The program parses each individual token using the given grammar.
@@ -25,6 +25,19 @@ Program flow:
   After beta reduction, the program outputs the reducted tree 
   in form of a string using "tree-traverse" function
 
+Het programma leest een expressie in uit <bestand>.txt.
+  Het programma tokenises de invoer in een vector van tokens.
+  Het programma ontleedt elk individueel token met behulp van de gegeven grammatica.
+  Terwijl elk knooppunt wordt ontleed, maakt het programma een pointer-boom.
+  Na het construeren van de boom voert het programma bètareductie op de boom uit,
+  terwijl het mogelijk is. (meer mogelijke informatie).
+  Na de bètareductie print het programma de gereduceerde boom uit
+  in de vorm van een string.
+
 Reductie startegie:
   Er wordt beta-reductie uitgevoerd in post-order. Dit is het enigste strategie
   die gebuikt wordt.
+
+Commandos:
+  - make build; make run
+  - make && ./program  positives.txt

@@ -4,7 +4,7 @@
 using namespace std;
 
 /**
- * main: Calls the parser to contruct a tree and perform beta-reduction and alfa-conversion.
+ * main: Roept de ASTree-constructor aan en voert beta reductie uit.
  * @authors  @Aleksandr Petrov (s3459918)
  * @authors  @Reyer Dix (s3459918)
  * @authors  @Nour Hassan (s3612031)
@@ -15,8 +15,8 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cout << "no file to read from" << std::endl;
-        exit(1);
+        std::cerr << "geen file om vanuit te lezen" << std::endl;
+        return 1;
     } else {
         const char* inputFile = argv[1];
 
@@ -24,31 +24,20 @@ int main(int argc, char* argv[]) {
         std::ifstream input(inputFile);
 
         if (!input.is_open()) {
-            std::cerr << "Failed to open the input file." << std::endl;
-            exit(1);
+            std::cerr << "gefaald om file te openen" << std::endl;
+            return 1;
         }
 
         std::string line;
         std::getline(input, line);
         ASTree parser(line);
-        for (int i = 0; i < parser.size; i++) {
-            std::cout << parser.tokens[i]->type;
-            std::cout << parser.tokens[i]->var;
-            std::cout << std::endl;
-        }
-
-        parser.maakBoom();
         parser.printBoom(parser.treeRoot); 
         parser.treeRoot = parser.postOrder(parser.treeRoot); 
-        if (parser.treeRoot != nullptr)
-        {
-            std::cout << std::endl << "result main" << std::endl;
-            parser.printBoom(parser.treeRoot);
-            std::cout << std::endl << "result main" << std::endl;
-            parser.deleteSubtree(parser.treeRoot);
-            parser.leegVector();
-            // exit(0);
-        }
+        std::cout << std::endl << "result main" << std::endl;
+        parser.printBoom(parser.treeRoot);
+        std::cout << std::endl << "result main" << std::endl;
+        parser.deleteSubtree(parser.treeRoot);
+        parser.leegVector();
             
 
     }
