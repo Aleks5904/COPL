@@ -16,6 +16,8 @@ using namespace std;
 
 class ASTree{
     public:
+        bool morePlaces;
+        bool replaced;
         Token* treeRoot;
         string input;
         vector<Token*> tokens;
@@ -58,7 +60,9 @@ class ASTree{
         // @brief Maakt de vector leeg, die voor de boom constructie zorgt.
         // @pre: Er bestaat een gevulde vector.
         // @post: De vector is leeg.
-        void freeVector();
+        void leegVector();
+
+        void meerPlekken(Token* ingang, std::string variable);
 
         // @function deleteSubtree()
         // @brief Verwijdert de (sub-)boom met de gegeven ingang.
@@ -73,7 +77,7 @@ class ASTree{
         // @return Retourneert beta-gereduceerde boom.
         // @pre: Er is een correct geconstrueerde boom doorgegeven.
         // @post: Beta-reductie is uitgevoerd.
-        Token* betaReduction(Token* ingang);
+        Token* betaReductie(Token* ingang);
 
     private:
         // @function findLambda()
@@ -95,7 +99,7 @@ class ASTree{
         // @post: De corresponderende boolean is returned.
         bool findGivenVar(Token* ingang, string variable);
 
-        Token* replaceSubtree(Token* ingang, Token* N, std::string variable, bool& replaced);
+        Token* replaceSubtree(Token* ingang, Token* N, std::string variable);
 
         // @function copySubtree()
         // @brief Kopieert de structuur van de gegeven boom 

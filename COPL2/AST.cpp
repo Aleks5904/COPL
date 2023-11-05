@@ -5,8 +5,18 @@ using namespace std;
 
 ASTree::ASTree(string invoer) {
     input = invoer; // de doorgegevn invoer
-	tokenize();
+	tokenize();    
 }
+
+bool CharInSet(char input, bool first){
+	if(input >= 'a' && input <= 'z')
+		return true; // charcter
+	if(input >= 'A' && input <= 'Z')
+		return true; // character
+	if(input >= '0' && input <= '9' && !first)
+		return true; // nummer
+	return false; // geen char/num
+} // CharInSet
 
 void ASTree::tokenize(){
 	std::cout << input;
@@ -212,9 +222,9 @@ void ASTree::printBoom(Token* ingang){
     }
 }
 
-void ASTree::freeVector(){
+void ASTree::leegVector(){
     for (int i = 0; i < tokens.size(); i++){
-        // only vars are used in tree creation
+        // alleen variabelen staan in de boom
         if (tokens[i]->type != Token::VARIABELE){ 
             delete tokens[i];
             tokens[i] = nullptr; 
@@ -225,78 +235,75 @@ void ASTree::freeVector(){
 void ASTree::deleteSubtree(Token* ingang){
     if (ingang)
     {
-        // go to the left child
+        // ga naar linker kind
         if (ingang->left != nullptr) deleteSubtree(ingang->left);
         
-        // go to the right child
-        if(ingang->right != nullptr) deleteSubtree(ingang->right);
-        
+        // ga naar rechter kind
+        if(ingang->right != nullptr) deleteSubtree(ingang->right);   
     }    
     delete ingang;
     ingang = nullptr;
 } // Tree::deleteSubtree
 
 Token* ASTree::copySubtree(Token* ingang) {
-    if (!ingang) return nullptr; // empty subtree
+    if (!ingang) return nullptr; // lege boom
     
-    Token* copy = new Token; // Token used to copy the tree
-    copy -> var = ingang -> var;
-    copy -> type = ingang -> type; // copy the type
+    Token* copy = new Token; // knoop voor copy boom
+    copy -> var = ingang -> var; // kopieer de string var
+    copy -> type = ingang -> type; // kopieer de type
 
-    if (ingang -> left != nullptr) { // go to the left child
+    if (ingang -> left != nullptr) { // ga naar linker kind
         copy -> left = copySubtree(ingang -> left);
         }
 
-    if (ingang -> right != nullptr) { // go to the right child
+    if (ingang -> right != nullptr) { // ga naar rechter kind
         copy -> right = copySubtree(ingang -> right);
         }
     return copy;
 } // Tree::copySubtree
 
-bool ASTree::findGivenVar(Token* ingang, string variable) {
-    if (ingang == nullptr) 
+bool ASTree::findGivenVar(Token* ingang, string variabel) {
+    if (ingang == nullptr) // lege ingang
         return false; 
 
-    if (ingang->var == variable) 
+    if (ingang->var == variabel) // variabel aanwezig
         return true; 
 
-    bool leftResult = findGivenVar(ingang->left, variable);
-    if (leftResult) 
+    bool leftResult = findGivenVar(ingang->left, variabel);
+    if (leftResult) // controleer linker kind
         return true; 
 
-    bool rightResult = findGivenVar(ingang->right, variable);
-    if (rightResult) 
+    bool rightResult = findGivenVar(ingang->right, variabel);
+    if (rightResult) // controleer rechter kind
         return true;
 
     return false;
 }
 
-Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable, bool& replaced) {
-    if (ingang == nullptr) {
+Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable) {
+    if (ingang == nullptr) { // lege knoop
         return nullptr; 
     }
-    if (ingang->var == variable && !replaced) {
+    if (ingang->var == variable) { // gevonden plek voor substitutie
         delete ingang;
         std::cout << "replacing with N" << std::endl;
-        ingang = N;
-        replaced = true;  // Set the flag to indicate that replacement has occurred
-        replacedAST = true;
-        std::cout << "boom: " << std::endl;
-        printBoom(ingang);
+        if (morePlaces) // meerdere plekken voor substitutie
+        {
+            std::cout << "more placing possible"<< std::endl;
+            Token* nCopy = copySubtree(N);
+            ingang = nCopy;
+        }
+        else ingang = N;
+        replaced = true;
         return ingang;
     }
-
-    if (!replaced) ingang->right = replaceSubtree(ingang->right, N, variable, replaced);
-    if (!replaced) ingang->left = replaceSubtree(ingang->left, N, variable, replaced);
-
     std::cout << "boom: " << std::endl;
     printBoom(ingang);
+    ingang->right = replaceSubtree(ingang->right, N, variable);
+    ingang->left = replaceSubtree(ingang->left, N, variable);
+
     return ingang;  
 }
-
-
-
-
 
 Token* ASTree::findLambda(Token* ingang) {
     if (ingang == nullptr) {
@@ -320,29 +327,41 @@ Token* ASTree::findLambda(Token* ingang) {
 }
 
 Token* ASTree::postOrder(Token* ingang) {
-    if (ingang == nullptr) {
-        return ingang;  // Base case: If the current node is null, exit the function.
-    }
-
-    // Recursively process the left and right subtrees in a post-order manner
+    int limit = 0; // houdt aantal beta-reducties bij
+    if (ingang == nullptr) 
+        return ingang;  
+    
     ingang->left = postOrder(ingang->left);
     ingang->right = postOrder(ingang->right);
 
-    // Check if the current node meets the condition for processing
+    // check voor startplek (applicatie+abstractie)
     if (ingang->type == Token::APPLICATION && ingang->left != nullptr
         && ingang->left->type == Token::SLASH) {
         while (ingang->type == Token::APPLICATION && ingang->left != nullptr
             && ingang->left->type == Token::SLASH) {
-            replacedAST = false;
-            ingang = betaReduction(ingang);
+            limit++;
+            if(limit > 1000) exit(2); // over 1000 beta-reducties
+            ingang = betaReductie(ingang);
         }
     }
 
     return ingang;
+
 }
 
+void ASTree::meerPlekken(Token* ingang, std::string variable){
+    if (ingang != nullptr)
+    {
+        if (ingang->left->var == variable 
+        && ingang->right->var == variable)
+            morePlaces = true;
+        else morePlaces = false;
+    }
+ }
 
-Token* ASTree::betaReduction(Token* ingang){
+Token* ASTree::betaReductie(Token* ingang){
+    morePlaces = false;
+    replaced = false;
     std::string deltaX;
     bool extraStap = false;
     std::cout << "beta found" << std::endl;
@@ -350,7 +369,6 @@ Token* ASTree::betaReduction(Token* ingang){
     bool toTheRight = false;
     Token* copy = nullptr;
     Token* ingang2 = nullptr;
-    bool replaced = false;
     if (ingang != nullptr)
     {
         Token* N = copySubtree(ingang->right);
@@ -376,22 +394,23 @@ Token* ASTree::betaReduction(Token* ingang){
             if (ingang->right->type != Token::VARIABELE)
             {
                 std::cout << "extraStap" << std::endl;
-                ingang->right = replaceSubtree(ingang->right, N, deltaX, replaced);
-                if(!replacedAST) deleteSubtree(N);
+                meerPlekken(ingang, deltaX);
+                ingang->right = replaceSubtree(ingang->right, N, deltaX);
+                if(morePlaces || !replaced) deleteSubtree(N);
                 extraStap = true;
             }
             
         }
         if(!extraStap && !toTheRight){
             std::cout << "test0";
-            ingang->right = replaceSubtree(ingang->right, N, deltaX, replaced);
-            if(!replacedAST) deleteSubtree(N);
-
+            ingang->right = replaceSubtree(ingang->right, N, deltaX);
+            if(!replaced) deleteSubtree(N); 
         }
         else if (!extraStap)
         {
-            ingang = replaceSubtree(ingang, N, deltaX, replaced);
-            if(!replacedAST) deleteSubtree(N);
+            meerPlekken(ingang, deltaX);
+            ingang = replaceSubtree(ingang, N, deltaX);
+            if(morePlaces) deleteSubtree(N);
             std::cout << "test1" << std::endl;
         }
         
@@ -411,5 +430,5 @@ Token* ASTree::betaReduction(Token* ingang){
     }
     return nullptr;
 
-} // ASTree::betaReduction
+} // ASTree::betaReductie
 
