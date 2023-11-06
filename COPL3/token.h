@@ -27,18 +27,18 @@ struct Token
         VARIABELE,
         SLASH,
         HAAKJEOPEN,
-        END,
-        HAAKJESLUIT
+        HAAKJESLUIT,
+        ARROW,
+        END
     }
     type;
 	string var; // informatie over de token
 
+    Token(string var, Type tokenType) : var(var), type(tokenType), 
+        left(nullptr), right(nullptr) {}
+
     // default constructor
-    Token(){
-        var = "";
-        left = nullptr;
-        right = nullptr;
-    };
+    Token() : var(""), left(nullptr), right(nullptr){}
     // destructor
     ~Token(){};
 }; // Token

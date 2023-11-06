@@ -210,6 +210,55 @@ Token* ASTree::pexpr() {
     }
 }
 
+Token* ASTree::type(){
+    positie++;
+    Token* t2 = nullptr;
+    Token* t = peek();
+    if (t->type == Token::UVAR)
+    {
+        t2 = type1();
+        Token* uvar = new Token(t->var, t->type);
+        Token* arrow = new Token("->", Token::ARROW);
+        if (t2 != nullptr)
+        {
+            arrow->left = uvar;
+            arrow->right = t2;
+        }
+        return arrow;
+    }
+    else if(t->type == Token::HAAKJEOPEN){
+        t2 = type();
+        if (t2 != nullptr)
+        {
+            positie++;
+            t = peek();
+            if (t->type != Token::HAAKJESLUIT)
+            {
+                std::cout << "no closing bracket (type)" << std::endl;
+                exit(1);
+            }
+            Token* t3 = type1();
+            if (t3 != nullptr)
+            {
+                Token* arrow = new Token("->", Token::ARROW);
+                arrow->left = t2;
+                arrow->right = t3;
+                return arrow;
+            }
+            
+        }
+        else{
+            std::cout << "error (type)" << std::endl;
+            exit(1);
+        }
+    }
+    else
+        return nullptr;
+} // ASTree::type
+
+Token* ASTree::type1(){}
+
+
 Token* ASTree::peek(){
 	return tokens[positie];
 }; // ASTree::peek

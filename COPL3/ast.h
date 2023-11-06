@@ -138,7 +138,11 @@ class ASTree{
         // @pre: Er bestaat een vector met knopen.
         // @post: De boom is opgebouwd (zover mogelijk).         
 		Token* pexpr();
-    
+
+        Token* type();
+
+        Token* type1();
+
 		// @function peek()
         // @brief Checkt wat voor type token op de gegeven positie staat. 
         // @return Returneert de corresponderende token. 
