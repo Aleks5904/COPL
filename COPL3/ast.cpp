@@ -248,7 +248,7 @@ Token* ASTree::type(){
             
         }
         else{
-            std::cout << "error (type)" << std::endl;
+            std::cerr << "error (type)" << std::endl;
             exit(1);
         }
     }
@@ -256,7 +256,24 @@ Token* ASTree::type(){
         return nullptr;
 } // ASTree::type
 
-Token* ASTree::type1(){}
+Token* ASTree::type1(){
+    positie++;
+    Token* t = peek();
+    if(t->type == Token::ARROW){
+        Token* t2 = type();
+        if (t2 != nullptr)
+        {
+            return t2;
+        }
+        else{
+            std::cerr << "error (type1)" << std::endl;
+            exit(1);
+        }
+        
+    }
+    else
+        return nullptr;
+} // ASTree::type1
 
 
 Token* ASTree::peek(){
