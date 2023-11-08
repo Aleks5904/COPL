@@ -16,15 +16,14 @@ using namespace std;
 
 class ASTree{
     public:
-        bool morePlaces;
-        bool replaced;
-        Token* treeRoot;
-        string input;
-        vector<Token*> tokens;
-        int size;
-        int positie;
-        int haakje;
-        bool replacedAST = false;
+        Token* treeRoot;        // de root van de boom
+        string input;           // de doorgegeven string
+        vector<Token*> tokens;  // vector met tokens
+        int size;               // grootte van de vector
+        int positie;            // momentele positie in vector
+        int haakje;             // teller voor opende- en sluitende haakjes
+
+        // default constructor
         ASTree(string invoer);
 
         // @function printBoom()
@@ -84,7 +83,15 @@ class ASTree{
         // @post: De corresponderende boolean is returned.
         bool findGivenVar(Token* ingang, string variable);
 
-        Token* replaceSubtree(Token* ingang, Token* N, std::string variable);
+        // @function replaceSubtree()
+        // @brief Voert substitutie uit voor gegeven variabel en boom.
+        // @param ingang: De start-knoop van de (sub-)boom.
+        // @param variable: De variabele waarvoor gezocht wordt.
+        // @param N: De (sub-)boom die gesubstitueerd wordt.
+        // @param variabel: De variabel die door N vervangen wordt
+        // @pre: Er is een correct geconstrueerde boom doorgegeven.
+        // @post: Alle substituties zijn uitgevoerd.       
+        Token* replaceSubtree(Token* ingang, Token* N, std::string variabel);
 
         // @function copySubtree()
         // @brief Kopieert de structuur van de gegeven boom 
@@ -133,9 +140,6 @@ class ASTree{
         // @post: De token is terug-gegeven.  
         Token* peek();
 
-        
-        void meerPlekken(Token* ingang, std::string variable);
-        
         // @function betaReduction()
         // @brief Voert beta-eductie uit op de gegeven (sub-)boom.
         // @param ingang: De ingang van de gegeven boom.

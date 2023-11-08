@@ -31,12 +31,13 @@ struct Token
     type;
 		string var; // informatie over de token
 
+    Token(string var, Type tokenType) : links(nullptr), rechts(nullptr), 
+        type(tokenType), var(var) {}
+        
     // default constructor
-    Token(){
-        var = "";
-        links = nullptr;
-        rechts = nullptr;
-    };
+    Token() : links(nullptr), rechts(nullptr) {}
+
+    // destructor
     ~Token(){};
 }; // Token
 

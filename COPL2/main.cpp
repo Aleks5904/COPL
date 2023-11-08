@@ -31,11 +31,9 @@ int main(int argc, char* argv[]) {
         std::string line;
         std::getline(input, line);
         ASTree parser(line);
-        parser.printBoom(parser.treeRoot); 
         parser.treeRoot = parser.postOrder(parser.treeRoot); 
-        std::cout << std::endl << "result main" << std::endl;
         parser.printBoom(parser.treeRoot);
-        std::cout << std::endl << "result main" << std::endl;
+        std::cout << std::endl;
         parser.deleteSubtree(parser.treeRoot);
         parser.leegVector();
             
