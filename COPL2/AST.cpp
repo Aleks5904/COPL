@@ -60,10 +60,10 @@ Token* ASTree::postOrder(Token* ingang) {
 void ASTree::leegVector(){
     for (int i = 0; i < size; i++){
         // alleen variabelen staan in de boom
-        if (tokens[i]->type != Token::VARIABELE){ 
+        // if (tokens[i]->type != Token::VARIABELE){ 
             delete tokens[i];
             tokens[i] = nullptr; 
-        }
+        // }
     }
 } // ASTree::freeVector
 
@@ -177,14 +177,8 @@ Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable) {
     if (ingang->var == variable) { // gevonden plek voor substitutie
         delete ingang;
         std::cout << "replacing with N" << std::endl;
-        if (morePlaces) // meerdere plekken voor substitutie
-        {
-            std::cout << "more placing possible"<< std::endl;
-            Token* nCopy = copySubtree(N);
-            ingang = nCopy;
-        }
-        else ingang = N;
-        replaced = true;
+        Token* nCopy = copySubtree(N);
+        ingang = nCopy;
         return ingang;
     }
     std::cout << "boom: " << std::endl;
@@ -258,7 +252,11 @@ Token* ASTree::lexpr(Token* ingang){
         huidig = peek();
         if (huidig->type == Token::VARIABELE)
         {
-           lambda->links = huidig;
+           Token* var = new Token();
+           var->type = huidig->type;
+           var->var = huidig->var;
+           lambda->links = var;
+           
            temp = lexpr(nullptr);
            if (temp == nullptr)
            {
@@ -294,7 +292,13 @@ Token* ASTree::pexpr() {
         std::cerr << "geen opende haakje" << std::endl;
         exit(1);
     }
-    if(huidig->type == Token::VARIABELE) return huidig;
+    if(huidig->type == Token::VARIABELE){ 
+        Token* var = new Token();
+        var->type = Token::VARIABELE;
+        var->var = huidig->var;
+        return var;
+    
+    }
     else if(huidig->type == Token::HAAKJEOPEN){
         haakje++;
         Token* temp = expr(nullptr);
@@ -319,19 +323,7 @@ Token* ASTree::peek(){
 	return tokens[positie];
 }; // ASTree::peek
 
-void ASTree::meerPlekken(Token* ingang, std::string variable){
-    if (ingang != nullptr)
-    {
-        if (ingang->links->var == variable 
-        && ingang->rechts->var == variable)
-            morePlaces = true;
-        else morePlaces = false;
-    }
- }
-
 Token* ASTree::betaReductie(Token* ingang){
-    morePlaces = false;
-    replaced = false;
     std::string deltaX;
     bool extraStap = false;
     std::cout << "beta found" << std::endl;
@@ -364,9 +356,8 @@ Token* ASTree::betaReductie(Token* ingang){
             if (ingang->rechts->type != Token::VARIABELE)
             {
                 std::cout << "extraStap" << std::endl;
-                meerPlekken(ingang, deltaX);
-                ingang->rechts = replaceSubtree(ingang->rechts, N, deltaX);
-                if(morePlaces || !replaced) deleteSubtree(N);
+                ingang = replaceSubtree(ingang, N, deltaX);
+                deleteSubtree(N);
                 extraStap = true;
             }
             
@@ -374,13 +365,12 @@ Token* ASTree::betaReductie(Token* ingang){
         if(!extraStap && !naarRechts){
             std::cout << "test0";
             ingang->rechts = replaceSubtree(ingang->rechts, N, deltaX);
-            if(!replaced) deleteSubtree(N); 
+            deleteSubtree(N); 
         }
         else if (!extraStap)
         {
-            meerPlekken(ingang, deltaX);
             ingang = replaceSubtree(ingang, N, deltaX);
-            if(morePlaces) deleteSubtree(N);
+            deleteSubtree(N);
             std::cout << "test1" << std::endl;
         }
         

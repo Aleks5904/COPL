@@ -10,7 +10,7 @@
 \y (\z (x y z))(\y (x))
 y (\x y) z
 y ((\x y)z)
-
+\x((\x x)x(\z x))z
 
 
 
