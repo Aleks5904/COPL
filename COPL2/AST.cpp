@@ -336,7 +336,7 @@ Token* ASTree::betaReductie(Token* ingang){
     bool extraStap = false;
     std::cout << "beta found" << std::endl;
     printBoom(ingang);
-    bool toTherechts = false;
+    bool naarRechts = false;
     Token* copy = nullptr;
     Token* ingang2 = nullptr;
     if (ingang != nullptr)
@@ -359,8 +359,8 @@ Token* ASTree::betaReductie(Token* ingang){
         if (ingang->rechts->type != Token::VARIABELE)
         {
             ingang = ingang->rechts;
-            std::cout << "toTherechts" << std::endl;
-            toTherechts = true;
+            std::cout << "naarRechts" << std::endl;
+            naarRechts = true;
             if (ingang->rechts->type != Token::VARIABELE)
             {
                 std::cout << "extraStap" << std::endl;
@@ -371,7 +371,7 @@ Token* ASTree::betaReductie(Token* ingang){
             }
             
         }
-        if(!extraStap && !toTherechts){
+        if(!extraStap && !naarRechts){
             std::cout << "test0";
             ingang->rechts = replaceSubtree(ingang->rechts, N, deltaX);
             if(!replaced) deleteSubtree(N); 
@@ -385,7 +385,7 @@ Token* ASTree::betaReductie(Token* ingang){
         }
         
         
-        if (toTherechts){
+        if (naarRechts){
             std::cout << "return #1" << std::endl;
             ingang2 = copySubtree(ingang);
         }
