@@ -71,7 +71,8 @@ void ASTree::tokenize(){
             var += input[i];
             std::cout << "lvar encountered at " << i  << std::endl;
            while ((CharInSet(input[i], true) || isNUm(input[i])) && input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' 
-                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' && i != stringSize-1){
+                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' 
+                && input[i+1] != '-' && i != stringSize-1){
 				i++;
 				var += input[i];
 			} // check variabele op correctheid en sla aan
@@ -84,7 +85,8 @@ void ASTree::tokenize(){
             var += input[i];
             std::cout << "uvar encountered at " << i  << std::endl;
             while ((CharInSet(input[i], false) || isNUm(input[i])) && input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' 
-                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' && i != stringSize-1){
+                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' 
+                && input[i+1] != '-' && i != stringSize-1){
 				i++;
 				var += input[i];
 			} // check variabele op correctheid en sla aan
@@ -114,7 +116,6 @@ bool ASTree::maakBoom(){
 	haakje = 0;
     treeRoot = tokens[0];
 	treeRoot = expr(nullptr);
-    positie++;
     huidig = peek();
     if (huidig->type != Token::DUBBPUNPT)
     {
@@ -133,12 +134,13 @@ bool ASTree::maakBoom(){
     return treeRoot;
 } // ASTree::checkExpression
 
-
-
 Token* ASTree::expr(Token* ingang){
     std::cout << "expr" << std::endl;
+    std::cout << "positie: " << positie << std::endl;
     Token* temp = lexpr(ingang);
+    std::cout << "expr: " << temp->var << std::endl;
     if (temp == nullptr) {
+        std::cout << "expr leeg" << std::endl;
         exit(1);
     }
     ingang = expr1(temp);
@@ -147,18 +149,26 @@ Token* ASTree::expr(Token* ingang){
 
 Token* ASTree::expr1(Token* ingang){
     std::cout << "expr1" << std::endl;
+    std::cout << "positie: " << positie << std::endl;
     Token* temp = lexpr(ingang);
+    // std::cout << "expr1: " << temp->var << std::endl;
     if (temp != nullptr) {
         ingang = expr1(temp);
         return ingang;
     }
-    return ingang;
+    // std::cout << "test";
+    else{ 
+        std::cout << "returning nullptr (expr1)" << std::endl;
+        return ingang;
+    }
 } // ASTree::expr1
 
 Token* ASTree::lexpr(Token* ingang){
     std::cout << "lexpr" << std::endl;
     positie++; // ga naar volgende token in vector
+    std::cout << "positie: " << positie << std::endl;
     Token* huidig = peek(); // krijg de momentele token uit vector
+    std::cout << "lexpr: " << huidig->var << std::endl;
     Token* temp = pexpr();
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
         std::cerr << "geen opende haakje" << std::endl;
@@ -168,6 +178,7 @@ Token* ASTree::lexpr(Token* ingang){
         if (ingang == nullptr) {
             return temp;
         }
+        std::cout << "applicatie in lexpr" << std::endl;
         // applicatie aanwezig
         Token* tok = new Token("@" ,Token::APPLICATIE);
         tok->links = ingang;
@@ -176,21 +187,24 @@ Token* ASTree::lexpr(Token* ingang){
     }
     else if (huidig->type == Token::LAMBDA)
     {
+        std::cout << "lambda in lexpr" << std::endl;
         // abstractie aanwezig
         Token* lambda = new Token("\\", Token::LAMBDA);
         positie++;
         huidig = peek(); // krijg de momentele token uit vector
         if (huidig->type == Token::LVAR)
         {
-           Token* var = new Token(huidig->var, Token::LVAR);
-           lambda->links = var;
-           positie++;
-           huidig = peek();
+            std::cout << "lvar in lexpr" << std::endl;
+            Token* var = new Token(huidig->var, Token::LVAR);
+            lambda->links = var;
+            positie++;
+            huidig = peek();
            if (huidig->type != Token::TOO)
            {
                 std::cerr << "missende ^" << std::endl;
                 exit(1);
            }
+           std::cout << "^ in lexpr" << std::endl; 
            temp = type();
            if (temp == nullptr)
            {
@@ -204,15 +218,16 @@ Token* ASTree::lexpr(Token* ingang){
              std::cerr << "geen expressie in abstractie" << std::endl;
              exit(1);
            }
-           lambda->rechts = temp;
-           if (ingang == nullptr)
+           if (ingang == nullptr){
+                std::cout << "returning lambda in lexpr" << std::endl;
                return lambda;
-           
+           }
+           else{
             Token* tok = new Token("@", Token::APPLICATIE);
             tok->links = ingang;
             tok->rechts = lambda;
             return tok;
-           
+           }
         }
         else
         {
@@ -220,20 +235,24 @@ Token* ASTree::lexpr(Token* ingang){
             exit(1);
         }
     }
-    else
+    else{
+        std::cout << "returning nullptr (lexpr)" << std::endl;
         return nullptr;
-    
+    }
 } // ASTree::lexpr
 
 Token* ASTree::pexpr() {
     std::cout << "pexpr" << std::endl;
+    std::cout << "positie: " << positie << std::endl;
     Token* huidig = peek(); // krijg de momentele token uit vector
+    std::cout << "pexpr: " << huidig->var << std::endl;
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
         std::cerr << "geen opende haakje" << std::endl;
         exit(1);
     }
     if(huidig->type == Token::LVAR){ // lvar aanwezig
         Token* var = new Token(huidig->var, Token::LVAR);
+        std::cout << "lvar in pexpr" << std::endl;
         return var;
     }
     else if(huidig->type == Token::HAAKJEOPEN){ // '('expr')' 
@@ -251,34 +270,40 @@ Token* ASTree::pexpr() {
             exit(1);
         }
         
-    } else
+    } else{
+        std::cout << "returning nullptr (pexpr)" << std::endl;
         return nullptr;
-    
+    }
 } // ASTree::pexpr()
 
 Token* ASTree::type(){
     std::cout << "type" << std::endl;
     positie++;
+    std::cout << "positie: " << positie << std::endl;
     Token* t2 = nullptr;
     Token* t = peek();
+    std::cout << "type: " << t->var << std::endl;
     if (t->type == Token::UVAR)
     {
-        std::cout << "type: " << t->var << std::endl;
+        std::cout << "UVAR in type: " << t->var << std::endl;
         t2 = type1();
         Token* uvar = new Token(t->var, t->type);
         Token* arrow = new Token("->", Token::ARROW);
         if (t2 != nullptr)
         {
+            std::cout << "type niet leeg" << std::endl;
             arrow->links = uvar;
             arrow->rechts = t2;
             return arrow;
         }
+        std::cout << "return uvar (type)" << std::endl;
         return uvar;
     }
     else if(t->type == Token::HAAKJEOPEN){
         t2 = type();
         if (t2 != nullptr)
         {
+            std::cout << "t2 != nullptr in type" << std::endl;
             positie++;
             t = peek();
             if (t->type != Token::HAAKJESLUIT)
@@ -289,11 +314,13 @@ Token* ASTree::type(){
             Token* t3 = type1();
             if (t3 != nullptr)
             {
+                std::cout << "arrow abstractie (type)" << std::endl;
                 Token* arrow = new Token("->", Token::ARROW);
                 arrow->links = t2;
                 arrow->rechts = t3;
                 return arrow;
             }
+            else return t2;
             
         }
         else{
@@ -307,11 +334,14 @@ Token* ASTree::type(){
 Token* ASTree::type1(){
     std::cout << "type1" << std::endl;
     positie++;
+    std::cout << "positie: " << positie << std::endl;
     Token* t = peek();
+    std::cout << "type1: " << t->var << std::endl;
     if(t->type == Token::ARROW){
         Token* t2 = type();
         if (t2 != nullptr)
         {
+            std::cout << "returning t2 in type1: " <<  t2->var << std::endl;
             return t2;
         }
         else{
@@ -321,6 +351,8 @@ Token* ASTree::type1(){
         
     }
     else
+        positie--;
+        std::cout << "returning nullptr in type1" << std::endl;
         return nullptr;
 } // ASTree::type1
 
@@ -329,13 +361,18 @@ Token* ASTree::peek(){
 }; // ASTree::peek
 
 void ASTree::printBoom(Token* ingang){
-    if (ingang->type == Token::VARIABELE)
+    if (ingang->type == Token::UVAR)
     {
         std::cout <<  ingang->var;
         return;
     }
+    if (ingang->type == Token::DUBBPUNPT){
+        printBoom(ingang->links);
+        std::cout << ingang->var;
+        printBoom(ingang->rechts);
+    }
     else if(ingang->type == Token::LAMBDA){
-         std::cout << "(";
+        std::cout << "(";
         std::cout << ingang->var;
         printBoom(ingang->links);
         std::cout << " ";
@@ -348,6 +385,23 @@ void ASTree::printBoom(Token* ingang){
         std::cout << " ";
         printBoom(ingang->rechts);
         std::cout << ")";
+    }
+    else if (ingang->type == Token::ARROW)
+    {
+        std::cout << "(";
+        printBoom(ingang->links);
+        std::cout << " " << ingang->var << " ";
+        printBoom(ingang->rechts);
+        std::cout << ")";
+    }
+    
+    else if(ingang->type == Token::LVAR && ingang->links != nullptr){
+        std::cout << ingang->var << "^";
+        printBoom(ingang->links);
+    }
+    else if(ingang->type == Token::LVAR){
+        std::cout <<  ingang->var;
+        return;
     }
 }
 
