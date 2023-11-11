@@ -8,7 +8,16 @@ ASTree::ASTree(string invoer) {
 	tokenize();    
 }
 
-bool CharInSet(char input, bool lowerCase){
+bool ASTree::varCheck(bool lowerCase){
+    if ((CharInSet(input[0], lowerCase) || isNUm(input[0])) && input[1] != ' ' 
+        && input[1] != '(' && input[1] != ')' && input[1] != '^' && input[1] != '\\' 
+            && input[1] != ':' && input[1] != '-'){
+        return true; 
+}
+return false;
+} // ASTree::varCheck
+
+bool ASTree::CharInSet(char input, bool lowerCase){
 	if(input >= 'a' && input <= 'z' && lowerCase)
 		return true; 
 	if(input >= 'A' && input <= 'Z' && !lowerCase)
@@ -16,11 +25,11 @@ bool CharInSet(char input, bool lowerCase){
 	return false; // geen char/num
 } // CharInSet
 
-bool isNUm(char input){
+bool ASTree::isNUm(char input){
     if (input >= '0' && input <= '9')
         return true;    
     return false;
-}
+} // ASTree::isNUm
 
 void ASTree::tokenize(){
 	std::cout << input;
@@ -65,14 +74,13 @@ void ASTree::tokenize(){
             t->var = "->";
             tokens.push_back(t);
             std::cout << "-> encountered at " << i  << std::endl;
+            i++;
         }
 		else if(CharInSet(input[i], true)) { // lvar 
             string var = "";
             var += input[i];
             std::cout << "lvar encountered at " << i  << std::endl;
-           while ((CharInSet(input[i], true) || isNUm(input[i])) && input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' 
-                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' 
-                && input[i+1] != '-' && i != stringSize-1){
+            while (varCheck(true) && i != stringSize-1){
 				i++;
 				var += input[i];
 			} // check variabele op correctheid en sla aan
@@ -84,9 +92,7 @@ void ASTree::tokenize(){
             string var = "";
             var += input[i];
             std::cout << "uvar encountered at " << i  << std::endl;
-            while ((CharInSet(input[i], false) || isNUm(input[i])) && input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' 
-                && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' 
-                && input[i+1] != '-' && i != stringSize-1){
+            while (varCheck(false) &&  i != stringSize-1){
 				i++;
 				var += input[i];
 			} // check variabele op correctheid en sla aan
@@ -151,12 +157,10 @@ Token* ASTree::expr1(Token* ingang){
     std::cout << "expr1" << std::endl;
     std::cout << "positie: " << positie << std::endl;
     Token* temp = lexpr(ingang);
-    // std::cout << "expr1: " << temp->var << std::endl;
     if (temp != nullptr) {
         ingang = expr1(temp);
         return ingang;
     }
-    // std::cout << "test";
     else{ 
         std::cout << "returning nullptr (expr1)" << std::endl;
         return ingang;
@@ -288,10 +292,10 @@ Token* ASTree::type(){
         std::cout << "UVAR in type: " << t->var << std::endl;
         t2 = type1();
         Token* uvar = new Token(t->var, t->type);
-        Token* arrow = new Token("->", Token::ARROW);
         if (t2 != nullptr)
         {
             std::cout << "type niet leeg" << std::endl;
+            Token* arrow = new Token("->", Token::ARROW);
             arrow->links = uvar;
             arrow->rechts = t2;
             return arrow;
@@ -350,10 +354,11 @@ Token* ASTree::type1(){
         }
         
     }
-    else
+    else{
         positie--;
         std::cout << "returning nullptr in type1" << std::endl;
         return nullptr;
+    }
 } // ASTree::type1
 
 Token* ASTree::peek(){
@@ -488,130 +493,6 @@ Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable) {
     return ingang;  
 }
 
-Token* ASTree::findLambda(Token* ingang) {
-    if (ingang == nullptr) {
-        return nullptr; 
-    }
 
-    if (ingang->type == Token::LAMBDA) {
-        return ingang->links;  
-    }
 
-    Token* linksResult = findLambda(ingang->links);
-    if (linksResult != nullptr) {
-        return linksResult; 
-    }
-
-    Token* rechtsResult = findLambda(ingang->rechts);
-    if (rechtsResult != nullptr) {
-        return rechtsResult; 
-    }  
-    return nullptr;
-}
-
-Token* ASTree::postOrder(Token* ingang) {
-    int limit = 0; // houdt aantal beta-reducties bij
-    if (ingang == nullptr) 
-        return ingang;  
-    
-    ingang->links = postOrder(ingang->links);
-    ingang->rechts = postOrder(ingang->rechts);
-
-    // check voor startplek (applicatie+abstractie)
-    if (ingang->type == Token::APPLICATIE && ingang->links != nullptr
-        && ingang->links->type == Token::LAMBDA) {
-        while (ingang->type == Token::APPLICATIE && ingang->links != nullptr
-            && ingang->links->type == Token::LAMBDA) {
-            limit++;
-            if(limit > 1000) exit(2); // over 1000 beta-reducties
-            ingang = betaReductie(ingang);
-        }
-    }
-
-    return ingang;
-
-}
-
-void ASTree::meerPlekken(Token* ingang, std::string variable){
-    if (ingang != nullptr)
-    {
-        if (ingang->links->var == variable 
-        && ingang->rechts->var == variable)
-            morePlaces = true;
-        else morePlaces = false;
-    }
- }
-
-Token* ASTree::betaReductie(Token* ingang){
-    morePlaces = false;
-    replaced = false;
-    std::string deltaX;
-    bool extraStap = false;
-    std::cout << "beta found" << std::endl;
-    printBoom(ingang);
-    bool toTherechts = false;
-    Token* copy = nullptr;
-    Token* ingang2 = nullptr;
-    if (ingang != nullptr)
-    {
-        Token* N = copySubtree(ingang->rechts);
-        deleteSubtree(ingang->rechts);
-        ingang->rechts = nullptr;
-        copy = ingang;
-        ingang = ingang->links;
-        deltaX = ingang->links->var;
-        Token* alfa = findLambda(ingang->rechts);
-        if (alfa != nullptr) // possible bound variable
-        {
-            bool bound = findGivenVar(N, alfa->var);
-            if (bound)
-            {
-                alfa->var += "'";
-            }
-        }
-        if (ingang->rechts->type != Token::VARIABELE)
-        {
-            ingang = ingang->rechts;
-            std::cout << "toTherechts" << std::endl;
-            toTherechts = true;
-            if (ingang->rechts->type != Token::VARIABELE)
-            {
-                std::cout << "extraStap" << std::endl;
-                meerPlekken(ingang, deltaX);
-                ingang->rechts = replaceSubtree(ingang->rechts, N, deltaX);
-                if(morePlaces || !replaced) deleteSubtree(N);
-                extraStap = true;
-            }
-            
-        }
-        if(!extraStap && !toTherechts){
-            std::cout << "test0";
-            ingang->rechts = replaceSubtree(ingang->rechts, N, deltaX);
-            if(!replaced) deleteSubtree(N); 
-        }
-        else if (!extraStap)
-        {
-            meerPlekken(ingang, deltaX);
-            ingang = replaceSubtree(ingang, N, deltaX);
-            if(morePlaces) deleteSubtree(N);
-            std::cout << "test1" << std::endl;
-        }
-        
-        
-        if (toTherechts){
-            std::cout << "return #1" << std::endl;
-            ingang2 = copySubtree(ingang);
-        }
-
-        else {
-            std::cout << "return #3" << std::endl;
-            ingang2 = copySubtree(ingang->rechts);
-        }
-        deleteSubtree(copy);
-        ingang = ingang2;
-        return ingang;
-    }
-    return nullptr;
-
-} // ASTree::betaReductie
 

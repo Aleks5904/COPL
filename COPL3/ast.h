@@ -78,6 +78,12 @@ class ASTree{
         Token* betaReductie(Token* ingang);
 
     private:
+        bool CharInSet(char input, bool lowerCase);
+
+        bool isNUm(char input);
+
+        bool varCheck(bool lowerCase);
+
         // @function findLambda()
         // @brief Vind een knoop met type Token::SLASH (lambda)
         // voor de gegeven boom

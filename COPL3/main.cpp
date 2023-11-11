@@ -38,6 +38,8 @@ int main(int argc, char* argv[]) {
         }
         parser.maakBoom();
         parser.printBoom(parser.treeRoot); 
+        parser.leegVector();
+        parser.deleteSubtree(parser.treeRoot);
             
 
     }
