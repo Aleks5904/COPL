@@ -1,14 +1,28 @@
-CC = g++
+CC=g++
+RM=rm -f
+CXXFLAGS=-std=c++11 -Wall
+LDFLAGS=
+LDLIBS=
 
-CompileParms = -c -Wall -std=c++11 -O2
+SRCS=main.cc parser.cc
+OBJS=$(subst .cpp,.o,$(SRCS))
+TARGET=program
 
-OBJS = main.o
+all: $(TARGET)
 
-Opdr: $(OBJS)
-	$(CC) $(OBJS) -o CPL1
+$(TARGET): $(OBJS)
+	$(CC) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
+
+main.o: main.cc parser.h token.h
+parser.o: parser.cc parser.h
 
 clean:
-	rm -rf *.o CPL1
+	$(RM) $(OBJS) $(TARGET)
 
-main.o: main.cc
-	$(CC) $(CompileParms)  main.cc
+distclean: clean
+
+build: $(TARGET)
+	@echo "Finished building $(TARGET)."
+
+run: build
+	./$(TARGET) positives.txt

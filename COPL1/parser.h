@@ -8,95 +8,105 @@ using namespace std;
 /**
  * Parser: Parser checkt de vector van token qua syntax
  * door gebruik te maken van LL-grammar.
- * @Aleksandr Petrov (s3459918)
- * @Nour Hassan (code)
- * @Reyer Dix (code)
- * parser.h
- * datum laatste verandering: 16/10/23
+ * @authors Aleksandr Petrov (s3459918)
+ * @authors Nour Hassan (code)
+ * @authors Reyer Dix (code)
+ * @file parser.h
+ * @date laatste verandering: 16/10/23
  **/
 
 class Parser{
 	public:
-		Parser();				// default constructor 
-		Parser(string invoer);	// constructor voor het opnemen van input
+    	int positie;           // de positie in de token-vector
+        int size;              // groote van de token vector
+		int haakje;            // teller voor de haakjes
+		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
+        string input;          // de invoer voor het parser constructor
+
+        // default constructor 
+		Parser(){}			  
+
+        // constructor voor het opnemen van input
+		Parser(string invoer); 
+
+        // destructor
+        ~Parser(){}
 
 		// @function checkExpression()
-        // @abstract Roept expr() aan voor het start van syntax check. 
-        // @return Returneert true alls alles goed uitpakt.
-        // @pre: Er is een correcte input doorgegeven.
+        // @brief Roept expr() aan voor het start van syntax check. 
+        // @return Returneert true als expressie klopt, anders false.
+        // @pre: Er bestaat een vector met tokens.
         // @post: Het input wordt ge-evalueert.  
 		bool checkExpression();
 
         // @function print()
-        // @abstract Print elke token van de vector uit. 
+        // @brief Print elke token van de vector uit. 
         // @pre: Er is een token met Token-objecten.
         // @post: Voor elke token wordt informatie uitgeprint.  
 		void print();
 
+        // @function freeVector()
+        // @brief Maakt de vector leeg, die voor de boom constructie zorgt.
+        // @pre: Er bestaat een gevulde vector.
+        // @post: De vector is leeg.    
+        void leegVector();
+
 	private:
-			
+
+		// @function CharInSet()
+        // @brief Controleert of het input een nummer of character is. 
+        // @param input: Input die gecontroleerd wordt.
+        // @param first: geeft aan of de input op "nummer" of "character" 
+        // gecontroleerd moet worden.
+        // @return return geeft terug of input een character of nummer is
+        // @return (true= het is nummer/char, anders false).
+        // @pre: Er is een correcte input doorgegeven.
+        // @post: De input is qua type gecontroleerd.  
+        bool CharInSet(char input, bool first);
+
+        // @function tokenize()
+        // @brief Slaat elke token met het correcte type en var aan. 
+        // @pre: Er bestaat een input string .
+        // @post: De input is tokenized in een vector.
+        void tokenize();
+
         // @function expr()
-        // @abstract Checkt of de expressie een correcte lexpressie en expressie` bevat. 
-        // @return Returneert de correctheid van lexpressie en expressie`. 
-        // @return true = syntax correct, anders false.
+        // @brief Checkt of de expressie een correcte lexpressie en expressie` bevat. 
+        // @return Returneert de correctheid van lexpr en expr`. 
+        // @return 1 = syntax correct, anders 0.
         // @pre: Er bestaat een vector individuele tokens.
         // @post: De expressie is gecontroleerd.  
 		int expr();
 			
 		// @function expr1()
-        // @abstract Checkt of de expressie een correcte expressie bevat of leeg is. 
-        // @return Returneert de correctheid van expressie. 
-        // @return true = syntax correct, anders false.
+        // @brief Checkt of de expressie een correcte lexpr en expr` 
+        // bevat of leeg is. 
         // @pre: Er bestaat een vector individuele tokens.
         // @post: De expressie` is gecontroleerd.  
-		int expr1();
+		void expr1();
 
 		// @function lexpr()
-        // @abstract Checkt of de expressie een correcte variabele en expressie bevat. 
-        // @return Returneert de correctheid van variabele en expressie. 
-        // @return true = syntax correct, anders false.
+        // @brief Checkt of de expressie een correcte pexpr / abstractie bevat. 
+        // @return Returneert de correctheid van pexpr / abstractie. 
+        // @return 1 = syntax correct, anders 0.
         // @pre: Er bestaat een vector individuele tokens.
-        // @post: De lexpressie` is gecontroleerd.  
+        // @post: De lexpressie is gecontroleerd.  
 		int lexpr();
 
 		// @function pexpr()
-        // @abstract Checkt of de expressie een correcte variabele en expressie bevat. 
+        // @brief Checkt of de expressie een correcte variabele en expressie bevat. 
         // @return Returneert de correctheid van variabele en expressie. 
-        // @return true = syntax correct, anders false.
+        // @return 1 = syntax correct, anders 0.
         // @pre: Er bestaat een vector individuele tokens.
         // @post: De pexpressie is gecontroleerd.  
 		int pexpr();
-
-		// @function var()
-        // @abstract Checkt of de variabele de correcte syntax bevat. 
-        // @return Returneert de correctheid van variabele. 
-        // @return true = syntax correct, anders false.
-        // @pre: Er bestaat een vector individuele tokens.
-        // @post: De variabele is gecontroleerd.  
-		int var();
 			
-		string input; // de invoer van het parser constructor
-		// size_t index; 
-		
-		int positie; //  de positie in de token-vector
-        int size;    //groote van de token vector
-		int haakje;  // teller voor de haakjes
-		//A vector class of token pointers used to store all the tokens we find.
-		vector<Token*> tokens; // vector voor het opslaan van het van individuele tokens
-
 		// @function peek()
-        // @abstract Checkt wat voor type token op de gegevenn positie staat. 
+        // @brief Checkt wat voor type token op de gegevenn positie staat. 
         // @return Returneert de corresponderende token. 
         // @pre: Er bestaat een vector individuele tokens.
-        // @post: De token is terug-gegeven.  
+        // @post: De token is returned.  
 		Token* peek(); 
-
-        // @function tokenize()
-        // @abstract Slaat elke token met het correcte type aan. 
-        // @pre: Er is een string input doorgegeven.
-        // @post: De input is doorgegeven in een vector van tokens.
-        void tokenize();
-
 
 }; // Parser
 

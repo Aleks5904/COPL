@@ -4,21 +4,23 @@
 using namespace std;
 
 /**
- * Token: Token construeert een object om informatie 
- * op te slaan van een individuele token.
- * @Aleksandr Petrov (s3459918)
- * @Nour Hassan (code)
- * @Reyer Dix (code)
- * token.h
- * datum laatste verandering: 16/10/23
+ * Token: Token construeert een object om informatie op te slaan
+ * over een individuele token.
+ * @author Aleksandr Petrov (s3459918)
+ * @author Nour Hassan (code)
+ * @author Reyer Dix (code)
+ * @file token.h
+ * @date laatste verandering: 12/11/23
  **/
+
 
 struct Token{
 	enum{
 		VARIABELE,
 		HAAKJEOPEN,
 		HAAKJESLUIT,
-		SLASH	
+		LAMBDA,
+		END	
 	} type; // type token
 
 	union 
@@ -28,6 +30,9 @@ struct Token{
 
     // default constructor
 	Token() : type(VARIABELE), var("") {} 
+
+	// destructor
+	~Token(){}
     
 }; // Token
 
