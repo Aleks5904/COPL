@@ -454,18 +454,10 @@ bool ASTree::findGivenVar(Token* ingang, string variabel) {
     if (ingang == nullptr) // lege ingang
         return false; 
 
-    if (ingang->var == variabel) // variabel aanwezig
-        return true; 
+    return(ingang->var == variabel || // variabel aanwezig
+        findGivenVar(ingang->links, variabel) ||// check links
+        findGivenVar(ingang->rechts, variabel)); // check rechts
 
-    bool linksResult = findGivenVar(ingang->links, variabel);
-    if (linksResult) // controleer linker kind
-        return true; 
-
-    bool rechtsResult = findGivenVar(ingang->rechts, variabel);
-    if (rechtsResult) // controleer rechter kind
-        return true;
-
-    return false;
 }
 
 Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable) {
@@ -493,6 +485,81 @@ Token* ASTree::replaceSubtree(Token* ingang, Token* N, std::string variable) {
     return ingang;  
 }
 
+bool ASTree::isDerivable(Token* root){
+    if(root->type != Token::DUBBPUNPT) return false;
+    root->links = getType(root->links);
+    
+    if (treeEq(root->links, root->rechts))
+    {
+        std::cout << "derivable" << std::endl;
+        return true;
+    }
+    return false;
+} // ASTree::isDerivable
 
+Token* ASTree::getType(Token* root){
+    if (root->type == Token::LAMBDA)
+        return  lambdaRule(root);
+    else if(root->type == Token::APPLICATIE)
+        return applRule(root);
+    else if(root->type == Token::LVAR)
+        return varRule(root);
 
+    return getType(root);
+}
 
+Token* ASTree::varRule(Token* LVAR){
+    for (int i = gamma.size(); i >= 0; i--){
+        if (gamma[i]->links->var == LVAR->var)
+            return gamma[i]->rechts;
+    }
+}
+
+Token* ASTree::applRule(Token* root){
+
+}
+// GEGEVEN: Gamma, X:T KRIJG: E : T'
+// LAAT ZIEN: Gamma KRIJG: \Ex^T E : T -> T' 
+Token* ASTree::lambdaRule(Token* lambda){
+    Token* judgement = new Token(":", Token::DUBBPUNPT);
+    Token* X = new Token(lambda->links->var, lambda->links->type);
+    Token* T = new Token(lambda->links->links->var, lambda->links->links->type);
+    judgement->links = X;
+    judgement->rechts = T;
+    gamma.push_back(judgement);
+    //stop x:T in gamma
+    //maak boom x:T
+    //    :
+    //   /  \ 
+    //  X    T
+    // gamma.push_back(boom)
+    Token* T1  = nullptr;
+    T1 = getType(lambda->rechts);
+    //T' = getType(E)
+    Token* arrow = new Token("->", Token::ARROW);
+    arrow->links = T;
+    arrow->rechts = T1;
+    return arrow;
+    //retourneer T->T'
+} // ASTree::lambdaRule
+
+bool ASTree::treeEq(Token* root1, Token* root2){
+
+    if(root1 == nullptr || root2 == nullptr){
+        return (root1 == nullptr && root2 == nullptr);
+    }
+
+    if(root1->type != root2->type){
+        return false;
+    }
+    
+    if(root1->type == 1 && root1->var != root2->var){
+        return false;
+    }
+            
+    if(treeEq(root1->links, root2->links)){
+        return treeEq(root1->rechts, root2->rechts);
+    }
+    
+    return false;
+}

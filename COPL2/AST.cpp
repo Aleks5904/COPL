@@ -35,7 +35,7 @@ void ASTree::printBoom(Token* ingang){
 } // ASTree::printBoom
 
 Token* ASTree::postOrder(Token* ingang) {
-    int limit = 0; // houdt aantal beta-reducties bij
+    int limiet = 0; // houdt aantal beta-reducties bij
     if (ingang == nullptr) 
         return ingang;  
     
@@ -47,8 +47,8 @@ Token* ASTree::postOrder(Token* ingang) {
         && ingang->links->type == Token::LAMBDA) {
         while (ingang->type == Token::APPLICATIE && ingang->links != nullptr
             && ingang->links->type == Token::LAMBDA) {
-            limit++;
-            if(limit > 1000) { // over 1000 beta-reducties
+            limiet++;
+            if(limiet > 1000) { // over 1000 beta-reducties
                 std::cout << "teveel β-reducties" << std::endl;
                 exit(2);
             } 

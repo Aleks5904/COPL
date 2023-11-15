@@ -45,6 +45,8 @@ struct Token
 
     // destructor
     ~Token(){};
+
+
 }; // Token
 
 #endif
