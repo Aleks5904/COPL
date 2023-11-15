@@ -1,6 +1,6 @@
 CC=g++
 RM=rm -f
-CXXFLAGS=-std=c++11 -Wall
+CXXFLAGS=-std=c++11 -Wall -Wextra
 LDFLAGS=
 LDLIBS=
 
@@ -13,8 +13,8 @@ all: $(TARGET)
 $(TARGET): $(OBJS)
 	$(CC) $(CXXFLAGS) $(LDFLAGS) -o $(TARGET) $(OBJS) $(LDLIBS)
 
-main.o: main.cc parser.h token.h
 parser.o: parser.cc parser.h
+main.o: main.cc parser.h token.h
 
 clean:
 	$(RM) $(OBJS) $(TARGET)

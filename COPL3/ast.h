@@ -23,6 +23,7 @@ class ASTree{
         int size;
         int positie;
         int haakje;
+        std::vector<Token*> gamma;
         ASTree(string invoer);
 
         // @function tokenize()
@@ -156,9 +157,13 @@ class ASTree{
         // @post: De token is terug-gegeven.  
         Token* peek();
 
-        
+        bool isDerivable(Token* root);
 
-        
+        Token* ASTree::getType(Token* root);
+        Token* varRule(Token* root);
+        Token* applRule(Token* root);
+        Token* lambdaRule(Token* root);
+        bool treeEq(Token* root1, Token* root2);
 }; // ASTree
 
 
