@@ -1,5 +1,5 @@
-#include "parser.h"
-#include "token.h"
+#include "../include/parser.h"
+#include "../include/token.h"
 
 
 bool Parser::CharInSet(char input, bool first){
@@ -148,9 +148,9 @@ int Parser::pexpr() {
             exit(1);
         }
         
-    } else
-        cout << "pexpr return 0" <<endl;
-        return 0;
+    }
+    cout << "pexpr return 0" <<endl;
+    return 0;
     
 } // Parser::pexpr()
 
