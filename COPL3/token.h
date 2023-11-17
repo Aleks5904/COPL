@@ -16,8 +16,8 @@ using namespace std;
 
 struct Token
 {
-    Token* links;
-    Token* rechts;
+    Token* links = nullptr;
+    Token* rechts = nullptr;
 
     enum Type
     {

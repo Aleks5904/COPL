@@ -32,16 +32,6 @@ int main(int argc, char* argv[]) {
         std::string line;
         std::getline(input, line);
         ASTree parser(line);
-        for (int i = 0; i < parser.size; i++)
-        {
-           std::cout << parser.tokens[i]->var << std::endl;
-        }
-        parser.maakBoom();
-        parser.printBoom(parser.treeRoot); 
-        parser.leegVector();
-        parser.deleteSubtree(parser.treeRoot);
-            
-
     }
 
     return 0;
