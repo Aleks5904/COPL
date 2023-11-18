@@ -4,37 +4,37 @@
 using namespace std;
 
 /**
- * main: Calls the parser to contruct a tree and perform beta-reduction and alfa-conversion.
+ * main: Roeopt de parser aan voor boom-constructie en tyep-check.
  * @authors  @Aleksandr Petrov (s3459918)
  * @authors  @Reyer Dix (s3459918)
  * @authors  @Nour Hassan (s3612031)
  * @file main.cc
- * @date last change: 20/10/23
+ * @date laatste veranderin: 18/11/23
 **/
 
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cout << "no file to read from" << std::endl;
+        std::cout << "geen file om af te lezen" << std::endl;
         exit(1);
-    } else {
+    } // if
+    else {
         const char* inputFile = argv[1];
 
         // Open the input file
         std::ifstream input(inputFile);
 
         if (!input.is_open()) {
-            std::cerr << "Failed to open the input file." << std::endl;
+            std::cerr << "gefaald om file te openen" << std::endl;
             exit(1);
-        }
+        } // if
 
-        
         std::string line;
-        std::getline(input, line);
+        std::getline(input, line); // lees de input van de file af
         ASTree parser(line);
-    }
+    } // else
 
     return 0;
-}
+} // main
 
 

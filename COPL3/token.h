@@ -11,7 +11,7 @@ using namespace std;
  * @author Nour Hassan (code)
  * @author Reyer Dix (code)
  * @file token.h
- * @date last change: 31/10/23
+ * @date laatste verandering: 18/11/23
  **/
 
 struct Token

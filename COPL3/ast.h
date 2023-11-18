@@ -6,12 +6,12 @@ using namespace std;
 #define AST
 
 /**
- * Tree: Constructs the tree by calling the parser.
+ * ASTree: Construeert boom vanuit de string.
  * @authors  @Aleksandr Petrov (s3459918)
  * @authors  @Reyer Dix (s3459918)
  * @authors  @Nour Hassan (s3612031)
  * @file AST.h
- * @date last change: 25/10/23
+ * @date laatste verandering: 18/11/23
  **/
 
 class ASTree{
