@@ -20,22 +20,22 @@ class ASTree{
         ASTree(string invoer);
 
     private:
-        Token* treeRoot;
-        string input;
-        vector<Token*> tokens;
-        int size;
-        int positie;
-        int haakje;
-        std::vector<Token*> gamma;
+        Token* treeRoot;            // de root van de boom
+        string input;               // de doorgegeven string
+        vector<Token*> tokens;      // vector met tokens
+        int size;                   // grootte van de vector
+        int positie;                // momentele positie in vector
+        int haakje;                 // teller voor opende- en sluitende haakjes
+        std::vector<Token*> gamma;  // slaat mini-bomen op voor het opbouwen type
+
         // @function varCheck()
         // @brief Algemene controle voor de character op positie i.
         // isNum?, CharInSet?, (?, )?...
-        // @param lowerCase: Geeft aan of er een lVar/uVar gecheckt wordt.
         // true = lVar, false = uVar
         // @return Retourneert true als input een variabele is, anders false.
         // @pre: Er is correct aangegeven of input lVar/uVar is.
         // @post: input is gecontroleerd.       
-        bool varCheck(bool lowerCase);
+        bool varCheck(int i);
 
         // @function CharInSet()
         // @brief Controleert of de input een uVar/lVar.
@@ -126,7 +126,7 @@ class ASTree{
         // @brief Print het boom af door het correct langs te gaan.
         // @param ingang: De token waarbij het printen begint.
         // @pre: Er bestaat een correct geconstrueerde boom.
-        // @post: De boom is geprint in voor van een string.
+        // @post: De boom is geprint in vorm van een string.
         void printBoom(Token* ingang);
                 
         // @function freeVector()

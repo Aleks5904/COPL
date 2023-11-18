@@ -1,0 +1,34 @@
+Cursus: Concepts of Programming Languages
+Groep: ?
+Groep-leden:
+- Aleksandr Petrov - s3459918
+- Reyer Dix - code 
+- Nour Hassan - code
+Compiler Versie: 
+  Ubuntu 11.4.0-1ubuntu1~22.04
+Besturingssysteem:
+  Linux
+
+Werking Programma:
+  flaws? - 
+
+Afdwalingen:
+
+
+Programma flow:
+
+Het programma leest een expressie in uit <bestand>.txt.
+  Het programma tokenises de invoer in een vector van tokens.
+  Het programma ontleedt elk individueel token met behulp van de gegeven grammatica.
+  Terwijl elk knooppunt wordt ontleed, maakt het programma een pointer-boom.
+  Na het construeren van de boom voert het programma type-check op de boom uit,
+  terwijl het mogelijk is. (meer mogelijke informatie).
+  Na de type-check print het programma de type van de boom uit in een ondubbelzinnige format, in de vorm van een string.
+
+Reductie startegie:
+  Er wordt beta-reductie uitgevoerd in post-order. Dit is het enigste strategie
+  die gebuikt wordt.
+
+Commandos:
+  - make build; make run
+  - make && ./program  positives.txt

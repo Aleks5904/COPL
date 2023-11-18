@@ -31,7 +31,7 @@ struct Token
         LVAR,        // 6
         ARROW,       // 7
         TOO,         // 8
-        DUBBPUNPT,   // 9
+        JUDG,        // 9
         END          // 10
     }
     type;
