@@ -25,9 +25,6 @@ Het programma leest een expressie in uit <bestand>.txt.
   terwijl het mogelijk is. (meer mogelijke informatie).
   Na de type-check print het programma de type van de boom uit in een ondubbelzinnige format, in de vorm van een string.
 
-Reductie startegie:
-  Er wordt beta-reductie uitgevoerd in post-order. Dit is het enigste strategie
-  die gebuikt wordt.
 
 Commandos:
   - make build; make run
