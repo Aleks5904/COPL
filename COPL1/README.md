@@ -1,24 +1,29 @@
-# Concepts Of Programming languages, Assignment 1
+Cursus: Concepts of Programming Languages
+Groep: ?
+Groep-leden:
+- Aleksandr Petrov - s3459918
+- Reyer Dix - s3333892
+- Nour Hassan - s3522415
 
-## introductie
-Dit is de eerste opgave van COPL van Nour Hassan, Aleks Petrov, Reyer Dix (s3333892)
+Compiler Versie: 
+  Ubuntu 11.4.0-1ubuntu1~22.04
+Besturingssysteem:
+  Linux
 
-## To do list
-To keep track of the procject Reyer is making a to-do list to effectively see what is done, is in progress or is finished.
+Werking Programma:
+  Programma werkt correct en er zijn geen flaws
 
-When marking a to-do as completed note your name down and the date
+Afdwalingen:
+  -N/A
 
-## 1.1
-### MUSTS
-- [ ] implement reading expression from standard input into a character string
-- [ ] implement analyzing character string into a string of tokens
-- [ ] implement parsing the token string
-- [ ]  implement outputting a character string in standard format to standard output
-- [ ] Decide on a standard format for the output
-- [ ] implement syntax error detection and reporting
-- [ ] make a makefile
+Programma flow:
 
-### MAY
-
-- [ ] Add explanation of how program works
-- [ ] make a positive.zip and negative.zip for testing
+Het programma leest een expressie in uit <bestand>.txt.
+  Het programma tokenises de invoer in een vector van tokens.
+  Het programma ontleedt vector met tokens met behulp van de gegeven grammatica
+  en controleert het op syntax.
+  Dit gebeurt door middel van "recursive descent". 
+  
+Commandos:
+  - make build; make run
+  - make && ./program  positives.txt

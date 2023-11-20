@@ -8,21 +8,15 @@ using namespace std;
 /**
  * Parser: Parser checkt de vector van token qua syntax
  * door gebruik te maken van LL-grammar.
- * @authors Aleksandr Petrov (s3459918)
- * @authors Nour Hassan (code)
- * @authors Reyer Dix (code)
+ * @author Aleksandr Petrov (s3459918)
+ * @author Nour Hassan (s3522415)
+ * @author Reyer Dix (s3333892)
  * @file parser.h
  * @date laatste verandering: 16/10/23
  **/
 
 class Parser{
 	public:
-    	int positie;           // de positie in de token-vector
-        int size;              // groote van de token vector
-		int haakje;            // teller voor de haakjes
-		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
-        string input;          // de invoer voor het parser constructor
-
         // default constructor 
 		Parser(){}			  
 
@@ -32,18 +26,12 @@ class Parser{
         // destructor
         ~Parser(){}
 
-		// @function checkExpression()
-        // @brief Roept expr() aan voor het start van syntax check. 
-        // @return Returneert true als expressie klopt, anders false.
-        // @pre: Er bestaat een vector met tokens.
-        // @post: Het input wordt ge-evalueert.  
-		bool checkExpression();
-
-        // @function print()
-        // @brief Print elke token van de vector uit. 
-        // @pre: Er is een token met Token-objecten.
-        // @post: Voor elke token wordt informatie uitgeprint.  
-		void print();
+	private:
+        int positie;           // de positie in de token-vector
+        int size;              // groote van de token vector
+		int haakje;            // teller voor de haakjes
+		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
+        string input;          // de invoer voor het parser constructor
 
         // @function freeVector()
         // @brief Maakt de vector leeg, die voor de boom constructie zorgt.
@@ -51,7 +39,11 @@ class Parser{
         // @post: De vector is leeg.    
         void leegVector();
 
-	private:
+        // @function print()
+        // @brief Print elke token van de vector uit. 
+        // @pre: Er is een token met Token-objecten.
+        // @post: Voor elke token wordt informatie uitgeprint.  
+		void print();
 
 		// @function CharInSet()
         // @brief Controleert of het input een nummer of character is. 

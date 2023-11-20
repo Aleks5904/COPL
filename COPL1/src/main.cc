@@ -6,9 +6,9 @@ using namespace std;
 
 /**
  * main: Roept de Parser-constructor aan en voert de expressie check uit.
- * @authors  @Aleksandr Petrov (s3459918)
- * @authors  @Reyer Dix (s3459918)
- * @authors  @Nour Hassan (s3612031)
+ * @author Aleksandr Petrov (s3459918)
+ * @author Nour Hassan (s3522415)
+ * @author Reyer Dix (s3333892)
  * @file main.cc
  * @date last change: 12/11/23
 **/
@@ -32,11 +32,6 @@ int main(int argc, char* argv[]) {
 	bool checkexpr;
 	getline(input, line);
 	Parser* temp = new Parser(line);
-	checkexpr = temp->checkExpression();
-	cout << "check \n" << checkexpr << endl;
-	if(checkexpr) cout << "succes" << endl;
-	temp->print();
-    temp->leegVector();
     delete temp;
     return 0;
 	}
