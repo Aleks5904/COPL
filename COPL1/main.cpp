@@ -15,16 +15,16 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cerr << "geen file om vanuit te lezen" << std::endl;
+        cerr << "geen file om vanuit te lezen" << endl;
         return 1;
     } else {
         const char* inputFile = argv[1];
 
         // Open the input file
-        std::ifstream input(inputFile);
+        ifstream input(inputFile);
 
         if (!input.is_open()) {
-            std::cerr << "gefaald om file te openen" << std::endl;
+            cerr << "gefaald om file te openen" << endl;
             return 1;
         } // if
     

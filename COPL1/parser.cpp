@@ -60,7 +60,7 @@ int Parser::expr(){
     cout << "positie:" << positie << endl;
     bool check1 = lexpr();
     if (!check1) {
-        cout << "expr error" << std::endl;
+        cout << "expressie error" << endl;
         leegVector();
         exit(1);
     } // if
@@ -86,7 +86,7 @@ int Parser::lexpr(){
         return 1;
     } // if
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
-        std::cerr << "geen opende haakje" << std::endl;
+        cerr << "geen opende haakje" << endl;
         leegVector();
         exit(1);
     } // if
@@ -95,15 +95,15 @@ int Parser::lexpr(){
         positie++;
         huidig = peek(); // krijg de momentele token uit vector
         if (huidig->type != Token::VARIABELE){
-            cout << "missende variabel" << endl;
+            cerr << "missende variabel" << endl;
             leegVector();
             exit(1);
         } // if
-           if (!lexpr()){
-             std::cerr << "geen expressie in abstractie" << std::endl;
-             leegVector();
-             exit(1);
-           } // if
+        if (!lexpr()){
+            cerr << "geen expressie in abstractie" << endl;
+            leegVector();
+            exit(1);
+        } // if
         
         return 1;
     } // elif
@@ -115,9 +115,9 @@ int Parser::pexpr() {
     cout << "pexpr" << endl;
     cout << "positie:" << positie << endl;
     Token* huidig = peek(); // krijg de momentele token uit vector
-    std::cout << "var pexpr: " << huidig->var << endl;
+    cout << "var pexpr: " << huidig->var << endl;
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
-        std::cerr << "geen opende haakje" << std::endl;
+        cerr << "geen opende haakje" << endl;
         leegVector();
         exit(1);
     } // if
@@ -133,7 +133,7 @@ int Parser::pexpr() {
             return 1;
         } // if
         else{
-            std::cerr << "geen sluitende haakje" << std::endl;
+            cerr << "geen sluitende haakje" << endl;
             leegVector();
             exit(1);
         } // else
@@ -164,7 +164,10 @@ void Parser::print(){
 			cout << "\\";
 			break;
 		case Token::VARIABELE:
-			cout << temp->var;
+            if(tokens[i+1]->type != Token::HAAKJESLUIT 
+                && tokens[i+1]->type != Token::HAAKJEOPEN)
+			    cout << temp->var << " ";
+            else cout << temp->var;
 			break;
 		default: // spatie
 			cout << " ";
