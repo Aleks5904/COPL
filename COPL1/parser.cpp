@@ -1,5 +1,5 @@
-#include "../include/parser.h"
-#include "../include/token.h"
+#include "parser.h"
+#include "token.h"
 
 bool Parser::CharInSet(char input, bool first){
 	if(input >= 'a' && input <= 'z')

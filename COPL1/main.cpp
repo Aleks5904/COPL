@@ -26,13 +26,12 @@ int main(int argc, char* argv[]) {
         if (!input.is_open()) {
             std::cerr << "gefaald om file te openen" << std::endl;
             return 1;
-        }
+        } // if
     
 	string line;
-	bool checkexpr;
 	getline(input, line);
 	Parser* temp = new Parser(line);
     delete temp;
     return 0;
-	}
-}
+	} // else
+} // main
