@@ -1,7 +1,6 @@
 #include "../include/parser.h"
 #include "../include/token.h"
 
-
 bool Parser::CharInSet(char input, bool first){
 	if(input >= 'a' && input <= 'z')
 		return true; // charcter
@@ -127,7 +126,6 @@ int Parser::pexpr() {
     else if(huidig->type == Token::HAAKJEOPEN){ // '('expr')' 
         cout << "haakjeopen (pexpr)" << endl;
         haakje++;
-        // Token* temp = expr(nullptr);
         expr();
         huidig = peek(); // krijg de momentele token uit vector
         if(huidig->type == Token::HAAKJESLUIT){

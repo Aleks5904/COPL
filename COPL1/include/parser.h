@@ -34,7 +34,8 @@ class Parser{
         string input;          // de invoer voor het parser constructor
 
         // @function freeVector()
-        // @brief Maakt de vector leeg, die voor de boom constructie zorgt.
+        // @brief Maakt de vector leeg, die de tokens 
+        // voor expressie controle bevat.
         // @pre: Er bestaat een gevulde vector.
         // @post: De vector is leeg.    
         void leegVector();
