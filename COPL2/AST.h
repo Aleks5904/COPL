@@ -7,22 +7,15 @@ using namespace std;
 
 /**
  * ASTree: Construeert boom door ASTree aan te roepen.
- * @authors  @Aleksandr Petrov (s3459918)
- * @authors  @Reyer Dix (s3459918)
- * @authors  @Nour Hassan (s3612031)
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file AST.h
- * @date laatste verandering: 25/10/23
+ * @date laatste verandering: 22/11/23
  **/
 
 class ASTree{
     public:
-        Token* treeRoot;        // de root van de boom
-        string input;           // de doorgegeven string
-        vector<Token*> tokens;  // vector met tokens
-        int size;               // grootte van de vector
-        int positie;            // momentele positie in vector
-        int haakje;             // teller voor opende- en sluitende haakjes
-
         // default constructor
         ASTree(string invoer);
 
@@ -54,7 +47,34 @@ class ASTree{
         // @post: De boom is verwijdert.
         void deleteSubtree(Token* ingang);
 
+        // getter voor overflow parameter
+        bool getOverflow(){return overflow;}
+
+        // getter voor fout parameter
+        bool getFout(){return fout;}
+
+        // getter voor treeRoot parameter
+        Token* getTreeRoot(){return treeRoot;}
+        
     private:
+        bool overflow;          // true = over 1000 β-reducties, anders false;
+        bool fout;              // geeft aan of er een fout in de expressie zit
+        Token* treeRoot;        // de root van de boom
+        string input;           // de doorgegeven string
+        vector<Token*> tokens;  // vector met tokens
+        int size;               // grootte van de vector
+        int positie;            // momentele positie in vector
+        int haakje;             // teller voor opende- en sluitende haakjes
+
+    	// @function CharInSet()
+        // @brief Controleert of het input een nummer of character is. 
+        // @param input: Input die gecontroleerd wordt.
+        // @param first: geeft aan of de input op "nummer" of "character" 
+        // gecontroleerd moet worden.
+        // @return return geeft terug of input een character of nummer is
+        // @return (true= het is nummer/char, anders false).
+        // @pre: Er is een correcte input doorgegeven.
+        // @post: De input is qua type gecontroleerd.  
         bool CharInSet(char input, bool first);
 
         // @function tokenize()
