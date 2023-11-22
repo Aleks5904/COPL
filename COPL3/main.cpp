@@ -5,11 +5,11 @@ using namespace std;
 
 /**
  * main: Roeopt de parser aan voor boom-constructie en tyep-check.
- * @authors  @Aleksandr Petrov (s3459918)
- * @authors  @Reyer Dix (s3459918)
- * @authors  @Nour Hassan (s3612031)
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file main.cc
- * @date laatste veranderin: 18/11/23
+ * @date laatste veranderin: 22/11/23
 **/
 
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     else {
         const char* inputFile = argv[1];
 
-        // Open the input file
+        // Open de input file
         std::ifstream input(inputFile);
 
         if (!input.is_open()) {
@@ -32,6 +32,9 @@ int main(int argc, char* argv[]) {
         std::string line;
         std::getline(input, line); // lees de input van de file af
         ASTree parser(line);
+
+        if(parser.getFout()) return 1;
+
     } // else
 
     return 0;

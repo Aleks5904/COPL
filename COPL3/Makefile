@@ -6,7 +6,7 @@ LDLIBS=
 
 SRCS=main.cpp ast.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-TARGET=program
+TARGET=CPL3
 
 all: $(TARGET)
 

@@ -7,11 +7,11 @@ using namespace std;
 
 /**
  * ASTree: Construeert boom vanuit de string.
- * @authors  @Aleksandr Petrov (s3459918)
- * @authors  @Reyer Dix (s3459918)
- * @authors  @Nour Hassan (s3612031)
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file AST.h
- * @date laatste verandering: 18/11/23
+ * @date laatste verandering: 22/11/23
  **/
 
 class ASTree{
@@ -19,7 +19,11 @@ class ASTree{
         // defalut constructor
         ASTree(string invoer);
 
+        //  getter voor fout parameter
+        bool getFout(){return fout;}
+        
     private:
+        bool fout;                  // geeft aan of er een fout in de expressie zit
         Token* treeRoot;            // de root van de boom
         string input;               // de doorgegeven string
         vector<Token*> tokens;      // vector met tokens

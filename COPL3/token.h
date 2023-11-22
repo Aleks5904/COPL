@@ -7,11 +7,11 @@ using namespace std;
 /**
  * Token: Token construeert een object om informatie op te slaan 
  * over een individuele knoop.
- * @author Aleksandr Petrov (s3459918)
- * @author Nour Hassan (code)
- * @author Reyer Dix (code)
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file token.h
- * @date laatste verandering: 18/11/23
+ * @date laatste verandering: 22/11/23
  **/
 
 struct Token
