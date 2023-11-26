@@ -1,5 +1,5 @@
 Cursus: Concepts of Programming Languages
-Groep: ?
+Groep: AleksNourReyer
 Groep-leden:
 - Aleksandr Petrov - s3459918
 - Reyer Dix - s3333892
@@ -19,11 +19,11 @@ Afdwalingen:
 Programma flow:
 
 Het programma leest een expressie in uit <bestand>.txt.
-  Het programma tokenises de invoer in een vector van tokens.
-  Het programma ontleedt vector met tokens met behulp van de gegeven grammatica
-  en controleert het op syntax.
-  Dit gebeurt door middel van "recursive descent". 
+Het programma tokenises de invoer in een vector van tokens.
+Het programma ontleedt vector met tokens met behulp van de gegeven grammatica
+en controleert het op syntax.
+Dit gebeurt door middel van "recursive descent". 
   
 Commandos:
   - make build; make run
-  - make && ./program  positives.txt
+  - make && ./CPL1  positives.txt

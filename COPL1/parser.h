@@ -6,13 +6,13 @@
 using namespace std;
 
 /**
- * Parser: Parser checkt de vector van token qua syntax
+ * Parser: Parser checkt de vector van tokens qua syntax
  * door gebruik te maken van LL-grammar.
  * @author Aleksandr Petrov (s3459918)
  * @author Nour Hassan (s3522415)
  * @author Reyer Dix (s3333892)
  * @file parser.h
- * @date laatste verandering: 16/10/23
+ * @date laatste verandering: 26/11/23
  **/
 
 class Parser{
@@ -26,19 +26,22 @@ class Parser{
         // destructor
         ~Parser(){}
 
-	private:
-        int positie;           // de positie in de token-vector
-        int size;              // groote van de token vector
-		int haakje;            // teller voor de haakjes
-		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
-        string input;          // de invoer voor het parser constructor
-
         // @function freeVector()
         // @brief Maakt de vector leeg, die de tokens 
         // voor expressie controle bevat.
         // @pre: Er bestaat een gevulde vector.
         // @post: De vector is leeg.    
         void leegVector();
+
+        int getFout(){return fout;}
+
+	private:
+        bool fout = false;     // geeft aan of er een fout aangetreden is
+        int positie;           // de positie in de token-vector
+        int size;              // groote van de token vector
+		int haakje;            // teller voor de haakjes
+		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
+        string input;          // de invoer voor het parser constructor
 
         // @function print()
         // @brief Print elke token van de vector uit. 

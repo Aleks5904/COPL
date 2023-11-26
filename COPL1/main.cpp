@@ -30,8 +30,9 @@ int main(int argc, char* argv[]) {
     
 	string line;
 	getline(input, line);
-	Parser* temp = new Parser(line);
-    delete temp;
+	Parser temp(line);
+    temp.leegVector();
+    if(temp.getFout()) return 1; // ontdekte fout
     return 0;
 	} // else
 } // main

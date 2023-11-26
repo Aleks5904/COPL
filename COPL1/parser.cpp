@@ -14,11 +14,10 @@ bool Parser::CharInSet(char input, bool first){
 Parser::Parser(string invoer){
 	input = invoer; // de doorgegevn invoer
 	tokenize();
-    positie = -1;
-	haakje = 0;
-	expr();
-    print();
-    leegVector();
+    positie = -1; haakje = 0; // default waarden
+    expr();
+	if(!fout)
+        print();
 } // Parser::Parser
 
 void Parser::tokenize(){
@@ -39,7 +38,8 @@ void Parser::tokenize(){
 		else if(CharInSet(input[i], true)){ // variabele
 			string variable = "";
 			variable.push_back(input[i]);
-			while (input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' && input[i+1] != '\\' && i != StringSize-1){
+			while (input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')'
+                && input[i+1] != '\\' && i != StringSize-1){
 				i++;
 				variable.push_back(input[i]);
 			} // check variabele op correctheid en sla aan
@@ -56,75 +56,66 @@ void Parser::tokenize(){
 } // Parser::tokenize
 
 int Parser::expr(){
-    cout << "expr" << endl;
-    cout << "positie:" << positie << endl;
+    if(fout) return 1;
     bool check1 = lexpr();
     if (!check1) {
         cout << "expressie error" << endl;
-        leegVector();
-        exit(1);
+        fout = true;
+        return 1;
     } // if
     expr1();
     return check1;
 } // Parser::expr
 
 void Parser::expr1(){
-    cout << "expr1" << endl;
-    cout << "positie:" << positie << endl;
+    if(fout) return;
     bool check1 = lexpr();
     if (check1) 
         expr1();
 } // Parser::expr1
 
 int Parser::lexpr(){
-    cout << "lexpr" << endl;
+    if (fout) return 1;
     positie++; // ga naar volgende token in vector
-    cout << "positie:" << positie << endl;
     Token* huidig = peek(); // krijg de momentele token uit vector
     if (pexpr()) {
-        cout << "lexpr 1 return" << endl;
         return 1;
     } // if
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
         cerr << "geen opende haakje" << endl;
-        leegVector();
-        exit(1);
+        fout = true;
+        return 1;
     } // if
     else if (huidig->type == Token::LAMBDA){
-        cout << "lambda lexpr" << endl;
         positie++;
         huidig = peek(); // krijg de momentele token uit vector
         if (huidig->type != Token::VARIABELE){
             cerr << "missende variabel" << endl;
-            leegVector();
-            exit(1);
+            fout = true;
+            return 1;
         } // if
         if (!lexpr()){
+            fout = true;
             cerr << "geen expressie in abstractie" << endl;
-            leegVector();
-            exit(1);
+            return 1;
         } // if
         
         return 1;
     } // elif
-    cout << "lexpr 0 return" << endl;
     return 0;
 } // Parser::lexpr
 
 int Parser::pexpr() {
-    cout << "pexpr" << endl;
-    cout << "positie:" << positie << endl;
+    if(fout) return 1;
     Token* huidig = peek(); // krijg de momentele token uit vector
-    cout << "var pexpr: " << huidig->var << endl;
     if (haakje == 0 && huidig->type == Token::HAAKJESLUIT){
         cerr << "geen opende haakje" << endl;
-        leegVector();
-        exit(1);
+        fout = true;
+        return 1;
     } // if
     if(huidig->type == Token::VARIABELE) // variabele aanwezig
         return 1;
     else if(huidig->type == Token::HAAKJEOPEN){ // '('expr')' 
-        cout << "haakjeopen (pexpr)" << endl;
         haakje++;
         expr();
         huidig = peek(); // krijg de momentele token uit vector
@@ -134,14 +125,12 @@ int Parser::pexpr() {
         } // if
         else{
             cerr << "geen sluitende haakje" << endl;
-            leegVector();
-            exit(1);
+            fout = true;
+            return 1;
         } // else
         
     } // elif
-    cout << "pexpr return 0" <<endl;
     return 0;
-    
 } // Parser::pexpr()
 
 Token* Parser::peek(){
