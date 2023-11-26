@@ -46,19 +46,24 @@ void ASTree::tokenize(){
 	int stringSize = input.size();
 	for (int i = 0; i < stringSize; i++){
         Token* t;
-		if (input[i] == '(')      // haakje-open
+		if (input[i] == '('){       // haakje-open
 			t = new Token("(", Token::HAAKJEOPEN);
-		else if(input[i] == ')')  // haakje-sluit
+            tokens.push_back(t);
+        } else if(input[i] == ')'){ // haakje-sluit
 			t = new Token(")", Token::HAAKJESLUIT);
-        else if(input[i] == ':')  // judgement
+            tokens.push_back(t);
+        } else if(input[i] == ':'){ // judgement
 			t = new Token(":", Token::JUDG);
-		else if(input[i] == '\\') // slash
+            tokens.push_back(t);
+        } else if(input[i] == '\\'){// slash
 			t = new Token("\\", Token::LAMBDA);	
-        else if(input[i] == '^')  // type
+            tokens.push_back(t);
+        } else if(input[i] == '^'){ // type
             t = new Token("^", Token::TOO);
-        else if(input[i] == '-' && input[i+1] == '>'){ // pijl
+            tokens.push_back(t);
+        } else if(input[i] == '-' && input[i+1] == '>'){ // pijl
             t = new Token("->", Token::ARROW);
-            i++;
+            i++; tokens.push_back(t);
         } // elif
 		else if(CharInSet(input[i], true)) { // lvar 
             string var = "";
@@ -68,6 +73,7 @@ void ASTree::tokenize(){
 				var += input[i];
 			} // check variabele op correctheid en sla aan
             t = new Token(var, Token::LVAR);
+            tokens.push_back(t);
 		} // elif
         else if(CharInSet(input[i], false)) { // uvar 
             string var = "";
@@ -77,10 +83,10 @@ void ASTree::tokenize(){
 				var += input[i];
 			} // check variabele op correctheid en sla aan
             t = new Token(var, Token::UVAR);
+            tokens.push_back(t);
 		} // elif
 		else if(input[i] == ' ') // ga door als spatie
 			continue;
-        tokens.push_back(t);
 	} // for
     Token* end = new Token("end", Token::END);
     tokens.push_back(end);
@@ -96,7 +102,7 @@ bool ASTree::maakBoom(){
         fout = true; return false;
     } // if
     Token* judg = new Token(":", Token::JUDG);
-    judg->links = treeRoot;
+    judg->links = treeRoot; treeRoot = judg;
     judg->rechts = type(); // maak de rechter deel van de boom
     if (judg->rechts == nullptr){
         cerr << "missende type " << endl;
@@ -243,6 +249,7 @@ Token* ASTree::type(){
         if (t2 != nullptr){
             positie++; t = peek();
             if (t->type != Token::HAAKJESLUIT){
+                deleteSubtree(t2);
                 cout << "geen sluitende haakje" << endl;
                 fout = true; return nullptr;
             } // if
@@ -272,6 +279,7 @@ Token* ASTree::type1(){
         if (t2 != nullptr)
             return t2;
         else{
+            deleteSubtree(t2);
             cerr << "error (type1)" << endl;
             fout = true; return nullptr;
         } // else
@@ -358,8 +366,8 @@ void ASTree::deleteSubtree(Token* ingang){
 Token* ASTree::copySubtree(Token* ingang) {
     if (!ingang) return nullptr; // lege boom
     
-    Token* copy = new Token; // knoop voor copy boom
-    copy->var = ingang->var; // kopieer de string var
+    Token* copy = new Token;   // knoop voor copy boom
+    copy->var = ingang->var;   // kopieer de string var
     copy->type = ingang->type; // kopieer de type
 
     if (ingang->links != nullptr) { // ga naar linker kind

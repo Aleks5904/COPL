@@ -11,7 +11,7 @@ using namespace std;
  * @author @Reyer Dix (s3333892)
  * @author @Nour Hassan (s3522415)
  * @file AST.h
- * @date laatste verandering: 22/11/23
+ * @date laatste verandering: 26/11/23
  **/
 
 class ASTree{
@@ -19,7 +19,7 @@ class ASTree{
         // defalut constructor
         ASTree(string invoer);
 
-        //  getter voor fout parameter
+        // getter voor fout parameter
         bool getFout(){return fout;}
         
     private:

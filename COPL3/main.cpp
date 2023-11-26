@@ -9,7 +9,7 @@ using namespace std;
  * @author @Reyer Dix (s3333892)
  * @author @Nour Hassan (s3522415)
  * @file main.cc
- * @date laatste veranderin: 22/11/23
+ * @date laatste verandering: 22/11/23
 **/
 
 
@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         std::getline(input, line); // lees de input van de file af
         ASTree parser(line);
 
-        if(parser.getFout()) return 1;
+        if(parser.getFout()) return 1; // ontdekte fout
 
     } // else
 

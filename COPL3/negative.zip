@@ -1,0 +1,9 @@
+(\x x)
+(\x^A (x y))
+(x y):A
+(\x^A y):(A->B)
+(\x^A x):(B -> B)
+(((\z^I(\y^(I->I)((\x^(I->I)x)y)))w)u):(I->I)
+\x^X(y z):((X->X)->(X->X))
+(\xA^A (\y^(Ax->B) (y ((\x^A x) x)))):(A -> ((A -> B) -> B))
+\y^(I->I)\x^(I)(y x)((I->I)->(I->I))
