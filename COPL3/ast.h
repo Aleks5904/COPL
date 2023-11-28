@@ -17,7 +17,7 @@ using namespace std;
 class ASTree{
     public:
         // defalut constructor
-        ASTree(string invoer);
+        ASTree(const string invoer);
 
         // getter voor fout parameter
         bool getFout(){return fout;}
@@ -39,7 +39,7 @@ class ASTree{
         // @return Retourneert true als input een variabele is, anders false.
         // @pre: Er is correct aangegeven of input lVar/uVar is.
         // @post: input is gecontroleerd.       
-        bool varCheck(int i);
+        bool varCheck(const int i);
 
         // @function CharInSet()
         // @brief Controleert of de input een uVar/lVar.
@@ -50,7 +50,7 @@ class ASTree{
         // lVar/uVar is, ander false. 
         // @pre: -
         // @post: input is gecontroleerd.
-        bool CharInSet(char input, bool lowerCase);
+        bool CharInSet(const char input, const bool lowerCase);
 
         // @function isNUm()
         // @brief Controleert of de input een nummer is
@@ -58,7 +58,7 @@ class ASTree{
         // @return Retourneert true als input = nummer, ander false.
         // @pre: -
         // @post: input is gecontroleerd.     
-        bool isNUm(char input);
+        bool isNUm(const char input);
 
         // @function tokenize()
         // @brief Loopt langs een string, maakt van elke char een token en
@@ -144,7 +144,7 @@ class ASTree{
         // @param bomen: De vector die wordt leeg gehaald.
         // @pre: Er bestaat een gevulde vector.
         // @post: De vector is leeg.
-        void leegPtrVector(std::vector<Token*> bomen);
+        void leegPtrVector(std::vector<Token*> & bomen);
 
         // @function deleteSubtree()
         // @brief Verwijdert de (sub-)boom met de gegeven ingang.

@@ -3,7 +3,7 @@
 #include "token.h"
 using namespace std;
 
-ASTree::ASTree(string invoer) {
+ASTree::ASTree(const string invoer) {
     input = invoer; // de doorgegeven invoer
     fout = false; positie = -1, haakje = 0; // start waarden
 	tokenize();    
@@ -20,7 +20,7 @@ ASTree::ASTree(string invoer) {
     deleteSubtree(treeRoot);
 } // ASTree::ASTree
 
-bool ASTree::varCheck(int i){
+bool ASTree::varCheck(const int i){
     if ((CharInSet(input[i], true) || isNUm(input[i]) || CharInSet(input[i], false)) 
         && input[i+1] != ' ' && input[i+1] != '(' && input[i+1] != ')' 
         && input[i+1] != '^' && input[i+1] != '\\' && input[i+1] != ':' && input[i+1] != '-')
@@ -28,15 +28,15 @@ bool ASTree::varCheck(int i){
 return false;
 } // ASTree::varCheck
 
-bool ASTree::CharInSet(char input, bool lowerCase){
+bool ASTree::CharInSet(const char input, const bool lowerCase){
 	if(input >= 'a' && input <= 'z' && lowerCase)
 		return true; 
-	if(input >= 'A' && input <= 'Z' && !lowerCase)
+	else if(input >= 'A' && input <= 'Z' && !lowerCase)
 		return true; 
 	return false; // geen char/num
 } // CharInSet
 
-bool ASTree::isNUm(char input){
+bool ASTree::isNUm(const char input){
     if (input >= '0' && input <= '9')
         return true;    
     return false;
@@ -346,9 +346,9 @@ void ASTree::leegVector(){
     } // for
 } // ASTree::freeVector
 
-void ASTree::leegPtrVector(vector<Token*> bomen){
-    for (int i = 0; i < int(gamma.size()); i++)
-        deleteSubtree(gamma[i]);
+void ASTree::leegPtrVector(vector<Token*> & bomen){
+    for (int i = 0; i < int(bomen.size()); i++)
+        deleteSubtree(bomen[i]);
 } // ASTree::leegPtrVector
 
 void ASTree::deleteSubtree(Token* ingang){
