@@ -58,7 +58,7 @@ class Parser{
         // @return (true= het is nummer/char, anders false).
         // @pre: Er is een correcte input doorgegeven.
         // @post: De input is qua type gecontroleerd.  
-        bool CharInSet(char input, bool first);
+        bool CharInSet(const char input, const bool first) const;
 
         // @function tokenize()
         // @brief Slaat elke token met het correcte type en var aan. 

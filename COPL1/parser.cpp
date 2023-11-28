@@ -1,17 +1,17 @@
 #include "parser.h"
 #include "token.h"
 
-bool Parser::CharInSet(char input, bool first){
+bool Parser::CharInSet(const char input, const bool first) const{
 	if(input >= 'a' && input <= 'z')
 		return true; // charcter
-	if(input >= 'A' && input <= 'Z')
+	else if(input >= 'A' && input <= 'Z')
 		return true; // character
-	if(input >= '0' && input <= '9' && !first)
+	else if(input >= '0' && input <= '9' && !first)
 		return true; // nummer
 	return false; // geen char/num
 } // Parser::CharInSet
 
-Parser::Parser(string invoer){
+Parser::Parser(const string invoer){
 	input = invoer; // de doorgegevn invoer
 	tokenize();
     positie = -1; haakje = 0; // default waarden
@@ -138,7 +138,7 @@ Token* Parser::peek(){
 }; // Parser::peek
 
 void Parser::print(){
-	int size = tokens.size();
+	const int size = tokens.size();
 	Token* temp; // hulp variabele voor het oplsaan van tokens
 	for (int i = 0; i < size; i++){
 		temp = tokens[i];
