@@ -10,10 +10,10 @@ Besturingssysteem:
   Linux
 
 Werking Programma:
-  flaws? - 
+  flaws - het programma werkt correct
 
 Afdwalingen:
-
+  N/A
 
 Programma flow:
   The program reads in an expression from <file>.txt.
