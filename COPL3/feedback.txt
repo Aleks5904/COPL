@@ -1,0 +1,8 @@
+Notes:
+
+
+task 3:
+- Wordt niet altijd in kanonieke vorm gezet
+- Ondersteund geen unicode karakters (bijvoorbeeld umlauf en griekse symbolen)
+- Parser werk mogelijk niet goed
+- mist punt
