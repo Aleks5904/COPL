@@ -12,11 +12,13 @@ bool Parser::CharInSet(const char input, const bool first) const{
 
 Parser::Parser(const string invoer){
 	input = invoer; // de doorgegevn invoer
-	tokenize();
+	output = "";
+    tokenize();
     positie = -1; haakje = 0; // default waarden
     expr();
 	if(!fout)
         print();
+    leegVector();
 } // Parser::Parser
 
 void Parser::tokenize(){
@@ -143,26 +145,26 @@ void Parser::print(){
 		temp = tokens[i];
 		switch (temp->type){
 		case Token::HAAKJEOPEN:
-			cout << "(";
+            output.append("(");
 			break;
 		case Token::HAAKJESLUIT:
-			cout << ")";
+            output.append(")");
 			break;
 		case Token::LAMBDA:
-			cout << "\\";
+            output.append("\\");
 			break;
 		case Token::VARIABELE:
+            output.append(temp->var);
             if(tokens[i+1]->type != Token::HAAKJESLUIT 
-                && tokens[i+1]->type != Token::HAAKJEOPEN)
-			    cout << temp->var << " ";
-            else cout << temp->var;
-			break;
+                && tokens[i+1]->type != Token::HAAKJEOPEN){
+                output.append(" ");
+            }
+            break;
 		default: // spatie
-			cout << " ";
+            output.append(" ");
 			break;
 		}
 	} // for
-	cout << endl;
 } // Parser::print
 
 void Parser::leegVector(){

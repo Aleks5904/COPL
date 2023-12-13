@@ -19,6 +19,8 @@ ASTree::ASTree(string invoer) {
             cout << endl;
         } // if
     } // if
+    deleteSubtree(getTreeRoot());
+    leegVector();
 } // ASTree::ASTree
 
 void ASTree::printBoom(Token* ingang){

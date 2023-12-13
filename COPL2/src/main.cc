@@ -32,14 +32,9 @@ int main(int argc, char* argv[]) {
         std::getline(input, line);
         ASTree parser(line);
 
-        // verwijder boom en leeg vector
-        parser.deleteSubtree(parser.getTreeRoot());
-        parser.leegVector();
-
         // handel de exit status correct af
         if(parser.getFout()) return 1;
         else if(parser.getOverflow()) return 2;
-
     } // if
 
     return 0;

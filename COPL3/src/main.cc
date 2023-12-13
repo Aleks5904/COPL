@@ -34,9 +34,7 @@ int main(int argc, char* argv[]) {
         ASTree parser(line);
 
         if(parser.getFout()) return 1; // ontdekte fout
-
     } // else
-
     return 0;
 } // main
 
