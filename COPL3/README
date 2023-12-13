@@ -1,0 +1,32 @@
+Cursus: Concepts of Programming Languages
+Groep: AleksNourReyer
+Groep-leden:
+- Aleksandr Petrov - s3459918
+- Reyer Dix - s3333892
+- Nour Hassan - s3522415
+Compiler Versie: 
+  Ubuntu 11.4.0-1ubuntu1~22.04
+Besturingssysteem:
+  Linux
+
+Werking Programma:
+  Het programma werkt naar behoren, geen fouten.
+
+Afdwalingen:
+ N/A
+
+Programma flow:
+  Het programma leest een expressie in uit <bestand>.txt.
+  Het programma tokenises de string invoer in een vector van tokens.
+  Het programma ontleedt elk individueel token met behulp van de gegeven grammatica.
+  Terwijl elk knooppunt wordt ontleed, maakt het programma een pointer-boom.
+  Na het construeren van de boom voert het programma type-check op de boom uit,
+  terwijl het mogelijk is.
+  Indien er geen fout ondekt is:
+    Na de type-check print het programma de type van de boom uit in 
+    een ondubbelzinnige format, in de vorm van een string.
+
+
+Commandos:
+  - make build; make run
+  - make && ./CPL3  positives.txt

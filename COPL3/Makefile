@@ -1,12 +1,12 @@
-INC_DIR = include
-SRC_DIR = src
-SOURCES = $(shell find $(SRC_DIR)/ -name '*.cc')
-OBJECTS = $(SOURCES:.cc=.o)
-DEPS = $(OBJECTS:.o=.d)
-TARGET = COPL3
-CC = g++
-CFLAGS = -march=native
-CPPFLAGS = $(addprefix -I, $(INC_DIR)) -Wall -Wextra -pedantic
+CC=g++
+RM=rm -f
+CXXFLAGS=-std=c++11 -Wall
+LDFLAGS=
+LDLIBS=
+
+SRCS=main.cpp ast.cpp
+OBJS=$(subst .cpp,.o,$(SRCS))
+TARGET=CPL3
 
 .PHONY: all clean debug release
 release: CFLAGS += -O3 -DNDEBUG
