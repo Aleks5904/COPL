@@ -7,17 +7,17 @@ using namespace std;
 /**
  * Token: Token construeert een object om informatie op te slaan 
  * over een individuele knoop.
- * @author Aleksandr Petrov (s3459918)
- * @author Nour Hassan (code)
- * @author Reyer Dix (code)
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file token.h
- * @date last change: 31/10/23
+ * @date laatste verandering: 22/11/23
  **/
 
 struct Token
 {
-    Token* links;
-    Token* rechts;
+    Token* links = nullptr;
+    Token* rechts = nullptr;
 
     enum Type
     {
@@ -31,7 +31,7 @@ struct Token
         LVAR,        // 6
         ARROW,       // 7
         TOO,         // 8
-        DUBBPUNPT,   // 9
+        JUDG,        // 9
         END          // 10
     }
     type;

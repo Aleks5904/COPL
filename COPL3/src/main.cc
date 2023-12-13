@@ -4,45 +4,40 @@
 using namespace std;
 
 /**
- * main: Calls the parser to contruct a tree and perform beta-reduction and alfa-conversion.
- * @authors  @Aleksandr Petrov (s3459918)
- * @authors  @Reyer Dix (s3459918)
- * @authors  @Nour Hassan (s3612031)
+ * main: Roeopt de parser aan voor boom-constructie en tyep-check.
+ * @author @Aleksandr Petrov (s3459918)
+ * @author @Reyer Dix (s3333892)
+ * @author @Nour Hassan (s3522415)
  * @file main.cc
- * @date last change: 20/10/23
+ * @date laatste verandering: 22/11/23
 **/
 
 
 int main(int argc, char* argv[]) {
     if (argc != 2) {
-        std::cout << "no file to read from" << std::endl;
+        std::cout << "geen file om af te lezen" << std::endl;
         exit(1);
-    } else {
+    } // if
+    else {
         const char* inputFile = argv[1];
 
-        // Open the input file
+        // Open de input file
         std::ifstream input(inputFile);
 
         if (!input.is_open()) {
-            std::cerr << "Failed to open the input file." << std::endl;
+            std::cerr << "gefaald om file te openen" << std::endl;
             exit(1);
-        }
+        } // if
 
-        
         std::string line;
-        std::getline(input, line);
+        std::getline(input, line); // lees de input van de file af
         ASTree parser(line);
-        for (int i = 0; i < parser.size; i++)
-        {
-           std::cout << parser.tokens[i]->var << std::endl;
-        }
-        parser.maakBoom();
-        parser.printBoom(parser.treeRoot); 
-        parser.leegVector();
-        parser.deleteSubtree(parser.treeRoot);
-            
 
-    }
+        if(parser.getFout()) return 1; // ontdekte fout
+
+    } // else
 
     return 0;
-}
+} // main
+
+
