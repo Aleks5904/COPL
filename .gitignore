@@ -1,4 +1,8 @@
 *.json
 *.exe
 *.o
+*.d
+COPL1/COPL1
+COPL2/COPL2
+COPL3/COPL3
 .vscode/settings.json
