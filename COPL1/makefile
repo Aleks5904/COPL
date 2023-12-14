@@ -6,7 +6,7 @@ LDLIBS=
 
 SRCS=main.cpp parser.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-TARGET=CPL1
+TARGET=C0PL1
 
 all: $(TARGET)
 

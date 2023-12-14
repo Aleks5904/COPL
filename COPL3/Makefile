@@ -6,7 +6,7 @@ LDLIBS=
 
 SRCS=main.cpp ast.cpp
 OBJS=$(subst .cpp,.o,$(SRCS))
-TARGET=CPL3
+TARGET=COPL3
 
 .PHONY: all clean debug release
 release: CFLAGS += -O3 -DNDEBUG
