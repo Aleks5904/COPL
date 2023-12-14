@@ -1,3 +1,6 @@
+#This makefile is made from the example file given by J.K. vis
+#in the course 'programming techniques' 2023
+
 INC_DIR = include
 SRC_DIR = src
 SOURCES = $(shell find $(SRC_DIR)/ -name '*.cc')
