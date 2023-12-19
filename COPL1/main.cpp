@@ -27,12 +27,15 @@ int main(int argc, char* argv[]) {
             cerr << "gefaald om file te openen" << endl;
             return 1;
         } // if
-    
-	string line;
-	getline(input, line);
-	Parser temp(line);
-    temp.leegVector();
-    if(temp.getFout()) return 1; // ontdekte fout
-    return 0;
+        string line;
+        getline(input, line);
+        Parser temp(line);
+        if(temp.getFout())
+            return 1; // ontdekte fout
+        Parser reparse(temp.getOut());
+        if(temp.getFout())
+            return 1; // ontdekte fout
+        cout << reparse.getOut() << endl;
+	return 0;
 	} // else
 } // main

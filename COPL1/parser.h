@@ -34,6 +34,7 @@ class Parser{
         void leegVector();
 
         int getFout(){return fout;}
+        string getOut(){return output;}
 
 	private:
         bool fout = false;     // geeft aan of er een fout aangetreden is
@@ -42,7 +43,7 @@ class Parser{
 		int haakje;            // teller voor de haakjes
 		vector<Token*> tokens; // vector voor het opslaan van individuele tokens
         string input;          // de invoer voor het parser constructor
-
+        string output;         // output om de string opnieuw te parsen
         // @function print()
         // @brief Print elke token van de vector uit. 
         // @pre: Er is een token met Token-objecten.
